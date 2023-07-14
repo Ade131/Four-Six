@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct Four_SixApp: App {
+    //Create instance of CoffeeBrewingModel
+    let coffeeModel = CoffeeBrewingModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //Pass coffeemodel to ContentView
+            ContentView().environmentObject(coffeeModel)
         }
     }
 }
