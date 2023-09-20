@@ -12,7 +12,7 @@ class CoffeeBrewingModel: ObservableObject {
     //Define properties to store water weight and the desired ratio
     @Published var waterWeight: Double = 0.0
     @Published var coffeeWeight: Double = 0.0
-    @Published var ratio: Double = 16.0
+    @Published var ratio: Double = 15.0
     
     //Property to track editing mode for coffee/water
     @Published var isEditingCoffee: Bool = false
