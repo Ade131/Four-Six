@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
     @State private var waterInput = "250" //Default 250ml
+    @State private var showOptions = false
     
     
     var body: some View {
@@ -42,6 +43,14 @@ struct ContentView: View {
                     }
                     
                 }
+                
+                Button("Options") {
+                    showOptions.toggle()
+                }
+                .sheet(isPresented: $showOptions) {
+                    OptionsView()
+                }
+                .padding()
                 
                 Spacer()
                 

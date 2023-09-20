@@ -14,10 +14,6 @@ class CoffeeBrewingModel: ObservableObject {
     @Published var coffeeWeight: Double = 0.0
     @Published var ratio: Double = 15.0
     
-    //Property to track editing mode for coffee/water
-    @Published var isEditingCoffee: Bool = false
-    @Published var isEditingWater: Bool = false
-    
     //Function to update coffee weight
     func updateWaterWeight(weight: Double) {
         waterWeight = weight
@@ -26,6 +22,15 @@ class CoffeeBrewingModel: ObservableObject {
     
     func updateCoffeeWeight() {
         coffeeWeight = waterWeight / ratio
+    }
+    
+    //Properties for options
+    @Published var taste: String = "Standard"
+    @Published var strength: String = "Strong"
+    
+    //Function to apply taste and strength preferences
+    func applyOptions() {
+        //stub
     }
     
     //Other settings
