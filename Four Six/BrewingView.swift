@@ -80,35 +80,40 @@ struct BrewingView: View {
         //reset variables
         self.currentPourNumber = 0
         self.totalPouredWeight = 0
+        var isDripping = true //flag to show pour or not
+        
+        //Initialise the first pour
+        let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
+        self.totalPouredWeight += firstPourAmount
+        self.currentInstruction = "Pour \(firstPourAmount)g - (\(totalPouredWeight)g total)"
+        self.stageTime = 10 // Set the first pour time to 10 seconds
+        
         
         //Schedule pours
-        self.timer = Timer.scheduledTimer(withTimeInterval: 45, repeats: true) { timer in
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            self.stageTime -= 1
             
-            if self.currentPourNumber < coffeeModel.pours.count {
-                self.stageTime = 45
+            // If it's time to move to the next stage
+            if self.stageTime <= 0 {
+                if self.currentPourNumber >= coffeeModel.pours.count {
+                    timer.invalidate()
+                    self.currentInstruction = "Remove dripper when finished"
+                    return
+                }
+                
+                if isDripping {
+                    self.currentInstruction = "Wait for next pour"
+                    self.currentPourNumber += 1
+                    self.stageTime = 35
+                } else {
+                    let pourAmount = coffeeModel.pours[self.currentPourNumber]
+                    self.totalPouredWeight += pourAmount
+                    self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
+                    self.stageTime = 10
+                }
+                
+                isDripping.toggle()
             }
-            
-            //When all pours are complete
-            if self.currentPourNumber >= coffeeModel.pours.count {
-                timer.invalidate()
-                self.currentInstruction = "Remove dripper when finished"
-                return
-            }
-            
-            //Start next pour
-            self.stageTime = 10
-            let pourAmount = coffeeModel.pours[self.currentPourNumber]
-            self.totalPouredWeight += pourAmount
-            //Show pour weight + total weight
-            self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
-            
-            
-            Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-                self.currentInstruction = "Wait for next pour"
-            }
-            
-            //Move to the next pour
-            self.currentPourNumber += 1
         }
     }
 }

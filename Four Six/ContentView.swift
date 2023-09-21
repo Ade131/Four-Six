@@ -43,6 +43,7 @@ struct ContentView: View {
                 Button("Start Brewing") {
                     if let waterWeight = Double(waterInput) {
                         coffeeModel.updateWaterWeight(weight: waterWeight)
+                        coffeeModel.calculatePours()
                         navigateToBrew = true
                     }
                     
