@@ -67,8 +67,6 @@ struct BrewingView: View {
             if self.stageTime < 0 {
                 self.preTimerDone = true
                 //reset time
-                self.stageTime = 0
-                //Invalidate the timer and nujllify the timer to stop
                 timer.invalidate()
                 //Start the brewing
                 startPours()
@@ -98,6 +96,7 @@ struct BrewingView: View {
                 if self.currentPourNumber >= coffeeModel.pours.count {
                     timer.invalidate()
                     self.currentInstruction = "Remove dripper when finished"
+                    
                     return
                 }
                 
@@ -110,6 +109,11 @@ struct BrewingView: View {
                     self.totalPouredWeight += pourAmount
                     self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
                     self.stageTime = 10
+                }
+                
+                //Skip the waiting time after the last pour
+                if self.currentPourNumber == coffeeModel.pours.count - 1 {
+                    self.stageTime = 0
                 }
                 
                 isDripping.toggle()
