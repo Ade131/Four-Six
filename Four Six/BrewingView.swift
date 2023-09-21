@@ -23,21 +23,29 @@ struct BrewingView: View {
         VStack {
             Text("Brewing Process")
                 .font(.largeTitle)
-                .padding()
+                .padding(.top, 20)
             
             Text(formatTime(currentTime))
                 .font(.title)
             
-            Text(currentInstruction)
-                .font(.headline)
+            Spacer()
             
             Text(formatTime(stageTime))
-                .font(.title)
+                .font(.system(size: 36))
+                .padding(.bottom, 20)
+            
+            Text(currentInstruction)
+                .font(.system(size: 24))
+                
+            
+            Spacer()
             
             //Stop button
             Button("Stop") {
                 timer?.invalidate()
             }
+            .buttonStyle(BlueButton())
+            .padding(.bottom, 20)
         }
         .onAppear {
             startBrewing()
@@ -125,4 +133,5 @@ struct BrewingView: View {
 
 #Preview {
     BrewingView()
+        .environmentObject(CoffeeBrewingModel())
 }

@@ -61,4 +61,5 @@ struct OptionsView: View {
 
 #Preview {
     OptionsView()
+        .environmentObject(CoffeeBrewingModel()) 
 }
