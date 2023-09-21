@@ -46,7 +46,7 @@ struct OptionsView: View {
             Picker("Strength", selection: $coffeeModel.strength) {
                 Text("Strong").tag("Strong")
                 Text("Medium").tag("Medium")
-                Text("Lightest").tag("Lightest")
+                Text("Lightest").tag("Light")
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
@@ -56,7 +56,7 @@ struct OptionsView: View {
         
         .onDisappear {
             //apply options
-            coffeeModel.applyOptions()
+            coffeeModel.calculatePours()
         }
     }
 }

@@ -60,8 +60,8 @@
 				708F88782A61651000710FCE /* Four_SixApp.swift */,
 				708F887A2A61651000710FCE /* ContentView.swift */,
 				70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */,
-				70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */,
 				70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */,
+				70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */,
 				708F887C2A61651100710FCE /* Assets.xcassets */,
 				708F887E2A61651100710FCE /* Preview Content */,
 			);

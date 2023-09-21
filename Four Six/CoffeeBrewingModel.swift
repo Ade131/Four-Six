@@ -14,6 +14,13 @@ class CoffeeBrewingModel: ObservableObject {
     @Published var coffeeWeight: Double = 0.0
     @Published var ratio: Double = 15.0
     
+    //Properties for options
+    @Published var taste: String = "Standard"
+    @Published var strength: String = "Strong"
+    
+    //Array to hold pour logic
+    @Published var pours: [Double] = []
+    
     //Function to update coffee weight
     func updateWaterWeight(weight: Double) {
         waterWeight = weight
@@ -24,13 +31,51 @@ class CoffeeBrewingModel: ObservableObject {
         coffeeWeight = waterWeight / ratio
     }
     
-    //Properties for options
-    @Published var taste: String = "Standard"
-    @Published var strength: String = "Strong"
+    //Func to calculate the brewing pours and sizes
+    func calculatePours() {
+        let firstStage = waterWeight * 0.4
+        let secondStage = waterWeight * 0.6
+        
+        pours.removeAll() //Clear existing pours
+        
+        //Calculate first stage based on user prefernces
+        var firstPour: Double = 0.0
+        var secondPour: Double = 0.0
+        switch taste {
+        case "Standard":
+            firstPour = firstStage * 0.5
+            secondPour = firstStage * 0.5
+        case "Sweeter":
+            firstPour = firstStage * 0.4
+            secondPour = firstStage * 0.6
+        case "Brighter":
+            firstPour = firstStage * 0.6
+            secondPour = firstStage * 0.4
+        default:
+            //Handle unexpected case
+            break
+        }
+        pours.append(firstPour)
+        pours.append(secondPour)
     
-    //Function to apply taste and strength preferences
-    func applyOptions() {
-        //stub
+        //Calculate remaining pours based on strength
+        var remainingPoursCount = 0
+        switch strength {
+        case "Strong":
+            remainingPoursCount = 4
+        case "Medium":
+            remainingPoursCount = 3
+        case "Light":
+            remainingPoursCount = 2
+        default:
+            //Handle unexpected case
+            break
+        }
+        
+        let remainingPourSize = secondStage / Double(remainingPoursCount)
+        for _ in 1...remainingPoursCount {
+            pours.append(remainingPourSize)
+        }
     }
     
     //Other settings
@@ -40,4 +85,5 @@ class CoffeeBrewingModel: ObservableObject {
     func toggleAudio() {
         audioEnabled.toggle()
     }
+    
 }
