@@ -11,6 +11,7 @@ struct BrewingView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
     //Properties for brewing process
+    @State private var totalPouredWeight = 0 //Weight poured
     @State private var currentPourNumber = 0 // Initialize to 0
     @State private var currentTime: Int = 0 // Total brewing time in seconds
     @State private var stageTime: Int = 0 // Time for each stage in seconds
@@ -39,6 +40,9 @@ struct BrewingView: View {
         }
         .onAppear {
             startBrewing()
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.currentTime += 1
+            }
         }
     }
     
@@ -65,26 +69,29 @@ struct BrewingView: View {
                 //Start the brewing
                 startPours()
             }
-            //Increase total time
-            self.currentTime += 1
         }
     }
     
     private func startPours() {
-        //reset current pour number
+        //reset variables
         self.currentPourNumber = 0
+        self.totalPouredWeight = 0
         
         //Schedule pours
         self.timer = Timer.scheduledTimer(withTimeInterval: 45, repeats: true) { timer in
+            
             //When all pours are complete
             if self.currentPourNumber >= coffeeModel.pours.count {
-                timer.invalidate()
-                //TODO: indicate brewing is complete
+                self.currentInstruction = "Remove dripper when finished"
+                self.stageTime = -1
             } else {
                 //Start next pour
                 self.stageTime = 10
-                self.currentInstruction = "Pour"
-                //TODO: Add logic here to perform the pour
+                let pourAmount = coffeeModel.pours[self.currentPourNumber]
+                self.totalPouredWeight += pourAmount
+                //Show pour weight + total weight
+                self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
+                
                 
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     self.currentInstruction = "Wait for next pour"
@@ -92,8 +99,6 @@ struct BrewingView: View {
                 //Move to the next pour
                 self.currentPourNumber += 1
             }
-            //Increase total time
-            self.currentTime += 1
         }
     }
     

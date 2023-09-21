@@ -19,7 +19,7 @@ class CoffeeBrewingModel: ObservableObject {
     @Published var strength: String = "Strong"
     
     //Array to hold pour logic
-    @Published var pours: [Double] = []
+    @Published var pours: [Int] = []
     
     //Function to update coffee weight
     func updateWaterWeight(weight: Double) {
@@ -39,24 +39,24 @@ class CoffeeBrewingModel: ObservableObject {
         pours.removeAll() //Clear existing pours
         
         //Calculate first stage based on user prefernces
-        var firstPour: Double = 0.0
-        var secondPour: Double = 0.0
+        var firstPour: Double = 0
+        var secondPour: Double = 0
         switch taste {
         case "Standard":
-            firstPour = firstStage * 0.5
-            secondPour = firstStage * 0.5
+            firstPour = (firstStage * 0.5).rounded()
+            secondPour = (firstStage * 0.5).rounded()
         case "Sweeter":
-            firstPour = firstStage * 0.4
-            secondPour = firstStage * 0.6
+            firstPour = (firstStage * 0.4).rounded()
+            secondPour = (firstStage * 0.6).rounded()
         case "Brighter":
-            firstPour = firstStage * 0.6
-            secondPour = firstStage * 0.4
+            firstPour = (firstStage * 0.6).rounded()
+            secondPour = (firstStage * 0.4).rounded()
         default:
             //Handle unexpected case
             break
         }
-        pours.append(firstPour)
-        pours.append(secondPour)
+        pours.append(Int(firstPour))
+        pours.append(Int(secondPour))
     
         //Calculate remaining pours based on strength
         var remainingPoursCount = 0
@@ -72,7 +72,7 @@ class CoffeeBrewingModel: ObservableObject {
             break
         }
         
-        let remainingPourSize = secondStage / Double(remainingPoursCount)
+        let remainingPourSize = Int((secondStage / Double(remainingPoursCount)).rounded())
         for _ in 1...remainingPoursCount {
             pours.append(remainingPourSize)
         }
