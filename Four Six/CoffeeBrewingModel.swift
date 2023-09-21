@@ -12,11 +12,11 @@ class CoffeeBrewingModel: ObservableObject {
     //Define properties to store water weight and the desired ratio
     @Published var waterWeight: Double = 0.0
     @Published var coffeeWeight: Double = 0.0
-    @Published var ratio: Double = 15.0
+    @Published var ratio: Int = 16
     
     //Properties for options
     @Published var taste: String = "Standard"
-    @Published var strength: String = "Strong"
+    @Published var strength: String = "Medium"
     
     //Array to hold pour logic
     @Published var pours: [Int] = []
@@ -28,7 +28,7 @@ class CoffeeBrewingModel: ObservableObject {
     }
     
     func updateCoffeeWeight() {
-        coffeeWeight = waterWeight / ratio
+        coffeeWeight = waterWeight / (Double(ratio))
     }
     
     //Func to calculate the brewing pours and sizes

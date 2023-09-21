@@ -17,6 +17,7 @@ struct BrewingView: View {
     @State private var stageTime: Int = 0 // Time for each stage in seconds
     @State private var timer: Timer? // The timer
     @State private var currentInstruction: String = "Get Ready"
+    @State private var preTimerDone: Bool = false
     
     var body: some View {
         VStack {
@@ -41,7 +42,9 @@ struct BrewingView: View {
         .onAppear {
             startBrewing()
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                self.currentTime += 1
+                if self.preTimerDone {
+                    self.currentTime += 1
+                }
             }
         }
     }
@@ -62,6 +65,7 @@ struct BrewingView: View {
             self.stageTime -= 1
             
             if self.stageTime < 0 {
+                self.preTimerDone = true
                 //reset time
                 self.stageTime = 0
                 //Invalidate the timer and nujllify the timer to stop
@@ -80,29 +84,35 @@ struct BrewingView: View {
         //Schedule pours
         self.timer = Timer.scheduledTimer(withTimeInterval: 45, repeats: true) { timer in
             
+            if self.currentPourNumber < coffeeModel.pours.count {
+                self.stageTime = 45
+            }
+            
             //When all pours are complete
             if self.currentPourNumber >= coffeeModel.pours.count {
+                timer.invalidate()
                 self.currentInstruction = "Remove dripper when finished"
-                self.stageTime = -1
-            } else {
-                //Start next pour
-                self.stageTime = 10
-                let pourAmount = coffeeModel.pours[self.currentPourNumber]
-                self.totalPouredWeight += pourAmount
-                //Show pour weight + total weight
-                self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
-                
-                
-                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-                    self.currentInstruction = "Wait for next pour"
-                }
-                //Move to the next pour
-                self.currentPourNumber += 1
+                return
             }
+            
+            //Start next pour
+            self.stageTime = 10
+            let pourAmount = coffeeModel.pours[self.currentPourNumber]
+            self.totalPouredWeight += pourAmount
+            //Show pour weight + total weight
+            self.currentInstruction = "Pour \(pourAmount)g - (\(totalPouredWeight)g total)"
+            
+            
+            Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
+                self.currentInstruction = "Wait for next pour"
+            }
+            
+            //Move to the next pour
+            self.currentPourNumber += 1
         }
     }
-    
 }
+
 
 #Preview {
     BrewingView()

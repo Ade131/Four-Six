@@ -21,9 +21,7 @@ struct OptionsView: View {
                 .font(.headline)
             Picker("Ratio", selection: $coffeeModel.ratio) {
                 Text("1:15").tag(15)
-                Text("1:15.5").tag(15.5)
                 Text("1:16").tag(16)
-                Text("1:16.5").tag(16.5)
                 Text("1:17").tag(17)
             }
             .pickerStyle(SegmentedPickerStyle())
@@ -33,8 +31,8 @@ struct OptionsView: View {
             Text("Pour Sizes")
                 .font(.headline)
             Picker("Taste", selection: $coffeeModel.taste) {
-                Text("Standard").tag("Standard")
                 Text("Sweeter").tag("Sweeter")
+                Text("Standard").tag("Standard")
                 Text("Brighter").tag("Brighter")
             }
             .pickerStyle(SegmentedPickerStyle())

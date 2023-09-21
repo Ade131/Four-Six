@@ -13,6 +13,7 @@ struct ContentView: View {
     
     @State private var waterInput = "250" //Default 250ml
     @State private var showOptions = false
+    @State private var navigateToBrew = false
     
     
     var body: some View {
@@ -28,7 +29,7 @@ struct ContentView: View {
                 
                 // Display the coffee amount based on the user input
                 if let waterWeight = Double(waterInput), !waterInput.isEmpty {
-                    Text("Using a ratio of 1:\(Int(coffeeModel.ratio)), grind \(Int(waterWeight / coffeeModel.ratio))g of coffee")
+                    Text("Using a ratio of 1:\(coffeeModel.ratio), grind \(Int(waterWeight / (Double(coffeeModel.ratio))))g of coffee")
                         .font(.subheadline)
                 } else {
                     Text("Enter a valid numeric water amount to calculate coffee weight")
@@ -36,10 +37,13 @@ struct ContentView: View {
                         .foregroundColor(.red) // You can customize the color
                 }
                 
+                NavigationLink("", destination: BrewingView(), isActive: $navigateToBrew)
+                .hidden()
                 
                 Button("Start Brewing") {
                     if let waterWeight = Double(waterInput) {
                         coffeeModel.updateWaterWeight(weight: waterWeight)
+                        navigateToBrew = true
                     }
                     
                 }
