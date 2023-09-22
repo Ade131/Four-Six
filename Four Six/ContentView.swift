@@ -74,7 +74,7 @@ struct ContentView: View {
                 .sheet(isPresented: $showOptions) {
                     OptionsView()
                 }
-                .buttonStyle(BlueButton())
+                .buttonStyle(OptionsButton())
                 .padding()
                 
                 Button("Start Brewing") {
@@ -84,7 +84,7 @@ struct ContentView: View {
                         navigateToBrew = true
                     }
                 }
-                .buttonStyle(BlueButton())
+                .buttonStyle(StartButton())
                 
                 Spacer()
                 

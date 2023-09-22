@@ -76,7 +76,7 @@ struct BrewingView: View {
                     }) {
                         Image(systemName: "forward.fill")
                             .resizable()
-                            .frame(width: 30, height: 30)
+                            .frame(width: 40, height: 40)
                             .foregroundColor(.blue)
                             .padding(.trailing, 20)
                     }
