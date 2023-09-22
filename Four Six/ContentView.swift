@@ -26,7 +26,7 @@ struct ContentView: View {
                 
                 Text("4:6")
                     .font(.largeTitle)
-                    .padding(.top)
+                    .padding(.top, -40)
                 
                 Spacer()
                 
@@ -87,19 +87,12 @@ struct ContentView: View {
                 .buttonStyle(StartButton())
                 
                 Spacer()
-                
-                HStack {
-                    Spacer()
-                    //Mute Audio Button
-                    Image(systemName: coffeeModel.audioEnabled ? "speaker.wave.3.fill" : "speaker.slash.fill")
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 20)
-                        .onTapGesture {
-                            //Toggle audio when tapped
-                            coffeeModel.toggleAudio()
-                        }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
+                        Image(systemName: "gearshape.fill")
+                    }
                 }
             }
         }

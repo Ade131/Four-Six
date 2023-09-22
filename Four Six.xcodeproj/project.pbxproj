@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7088A5E02ABDD85B005B4A87 /* UIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7088A5DF2ABDD85B005B4A87 /* UIElements.swift */; };
+		7088A5E22ABDEB3C005B4A87 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7088A5E12ABDEB3C005B4A87 /* SettingsView.swift */; };
 		708F88792A61651000710FCE /* Four_SixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708F88782A61651000710FCE /* Four_SixApp.swift */; };
 		708F887B2A61651000710FCE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708F887A2A61651000710FCE /* ContentView.swift */; };
 		708F887D2A61651100710FCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 708F887C2A61651100710FCE /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		7088A5DF2ABDD85B005B4A87 /* UIElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElements.swift; sourceTree = "<group>"; };
+		7088A5E12ABDEB3C005B4A87 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = ../SettingsView.swift; sourceTree = "<group>"; };
 		708F88752A61651000710FCE /* Four Six.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Four Six.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		708F88782A61651000710FCE /* Four_SixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Four_SixApp.swift; sourceTree = "<group>"; };
 		708F887A2A61651000710FCE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				708F887A2A61651000710FCE /* ContentView.swift */,
 				70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */,
 				70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */,
+				7088A5E12ABDEB3C005B4A87 /* SettingsView.swift */,
 				70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */,
 				7088A5DF2ABDD85B005B4A87 /* UIElements.swift */,
 				708F887C2A61651100710FCE /* Assets.xcassets */,
@@ -149,6 +152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7088A5E22ABDEB3C005B4A87 /* SettingsView.swift in Sources */,
 				70A335D62ABB3DB20061FBA3 /* CoffeeBrewingModel.swift in Sources */,
 				708F887B2A61651000710FCE /* ContentView.swift in Sources */,
 				708F88792A61651000710FCE /* Four_SixApp.swift in Sources */,

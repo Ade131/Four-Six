@@ -14,7 +14,7 @@ struct BrewingView: View {
     @State private var totalPouredWeight = 0 //Weight poured
     @State private var currentPourNumber = 0 // Initialize to 0
     @State private var currentTime: Int = 0 // Total brewing time in seconds
-    @State private var stageTime: Int = 0 // Time for each stage in seconds
+    @State private var stageTime: Int = 5 // Time for each stage in seconds
     @State private var timer: Timer? // The timer
     @State private var totalTimeTimer: Timer? // Main total timer
     @State private var currentInstruction: String = "Get Ready"

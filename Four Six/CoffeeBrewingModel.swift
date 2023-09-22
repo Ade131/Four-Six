@@ -79,7 +79,7 @@ class CoffeeBrewingModel: ObservableObject {
     }
     
     //Other settings
-    @Published var audioEnabled: Bool = true
+    @Published var audioEnabled: Bool = false
     
     //Function to toggle audio settings
     func toggleAudio() {
