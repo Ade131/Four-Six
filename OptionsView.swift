@@ -17,7 +17,7 @@ struct OptionsView: View {
                 .padding()
             
             //Ratio Selection
-            Text("Select Ratio")
+            Text("Ratio")
                 .font(.headline)
             Picker("Ratio", selection: $coffeeModel.ratio) {
                 Text("1:15").tag(15)
@@ -28,7 +28,7 @@ struct OptionsView: View {
             .padding()
             
             //Taste selection
-            Text("Pour Sizes")
+            Text("Balance")
                 .font(.headline)
             Picker("Taste", selection: $coffeeModel.taste) {
                 Text("Sweeter").tag("Sweeter")
@@ -39,7 +39,7 @@ struct OptionsView: View {
             .padding()
             
             // Strength selection
-            Text("Select Strength")
+            Text("Strength")
                 .font(.headline)
             Picker("Strength", selection: $coffeeModel.strength) {
                 Text("Strong").tag("Strong")
