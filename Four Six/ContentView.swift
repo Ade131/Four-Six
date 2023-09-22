@@ -22,76 +22,79 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 10) {
-                
-                Text("4:6")
-                    .font(.largeTitle)
-                    .padding(.top, -40)
-                
-                Spacer()
-                
-                Text("How much coffee are you brewing?")
-                    .font(.headline)
-                    .padding(.top)
-                
-                VStack(spacing: 3) {
-                    Text("\(waterInput) ml")
-                        .font(.title)
-                        .fontWeight(.bold)
+            ZStack {
+                Color.white.ignoresSafeArea()
+                VStack(spacing: 10) {
                     
-                    Text("Edit")
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            showPicker = true
-                        }
-                        .actionSheet(isPresented: $showPicker) {
-                            ActionSheet(title: Text("Select water amount (ml)"),
-                                        buttons: pickerOptions.map { option in
-                                    .default(Text("\(option)")) {
-                                        waterInput = "\(option)"
-                                    }
-                            })
-                        }
-                }
-                
-                VStack(spacing: 3) {
-                    Text("Prepare")
-                        .font(.headline)
-                    Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text("of ground coffee")
-                        .font(.headline)
+                    Text("4:6")
+                        .font(.largeTitle)
+                        .padding(.top, -40)
                     
-                    NavigationLink("", destination: BrewingView(), isActive: $navigateToBrew)
-                        .hidden()
-                }
-                .padding(.top)
-                
-                Button("Brew Options") {
-                    showOptions.toggle()
-                }
-                .sheet(isPresented: $showOptions) {
-                    OptionsView()
-                }
-                .buttonStyle(OptionsButton())
-                .padding()
-                
-                Button("Start Brewing") {
-                    if let waterWeight = Double(waterInput) {
-                        coffeeModel.updateWaterWeight(weight: waterWeight)
-                        coffeeModel.calculatePours()
-                        navigateToBrew = true
+                    Spacer()
+                    
+                    Text("How much coffee are you brewing?")
+                        .font(.headline)
+                        .padding(.top)
+                    
+                    VStack(spacing: 3) {
+                        Text("\(waterInput) ml")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        
+                        Text("Edit")
+                            .foregroundColor(.blue)
+                            .onTapGesture {
+                                showPicker = true
+                            }
+                            .actionSheet(isPresented: $showPicker) {
+                                ActionSheet(title: Text("Select water amount (ml)"),
+                                            buttons: pickerOptions.map { option in
+                                        .default(Text("\(option)")) {
+                                            waterInput = "\(option)"
+                                        }
+                                })
+                            }
                     }
+                    
+                    VStack(spacing: 3) {
+                        Text("Prepare")
+                            .font(.headline)
+                        Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text("of ground coffee")
+                            .font(.headline)
+                        
+                        NavigationLink("", destination: BrewingView(), isActive: $navigateToBrew)
+                            .hidden()
+                    }
+                    .padding(.top)
+                    
+                    Button("Brew Options") {
+                        showOptions.toggle()
+                    }
+                    .sheet(isPresented: $showOptions) {
+                        OptionsView()
+                    }
+                    .buttonStyle(OptionsButton())
+                    .padding()
+                    
+                    Button("Start Brewing") {
+                        if let waterWeight = Double(waterInput) {
+                            coffeeModel.updateWaterWeight(weight: waterWeight)
+                            coffeeModel.calculatePours()
+                            navigateToBrew = true
+                        }
+                    }
+                    .buttonStyle(StartButton())
+                    
+                    Spacer()
                 }
-                .buttonStyle(StartButton())
-                
-                Spacer()
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
-                        Image(systemName: "gearshape.fill")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
+                            Image(systemName: "gearshape.fill")
+                        }
                     }
                 }
             }
