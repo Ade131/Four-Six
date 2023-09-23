@@ -9,12 +9,12 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    static let medPrimary = Color(hex: "5e503f")
-    static let lightPrimary = Color(hex: "a9927d")
-    static let backgroundColour = Color(hex: "22333b")
-    static let lightSecondary = Color(hex: "B7B7A4")
-    static let medSecondary = Color(hex: "A5A58D")
-    static let darkSecondary = Color(hex: "6B705C")
+    static let backgroundColour = Color("Background")
+    static let buttonColour = Color("Button")
+    static let textColour = Color("Text")
+    static let iconColour = Color("Icon")
+    static let linkColour = Color("Link Text")
+
     
     init(hex: String) {
         let hex = hex.replacingOccurrences(of: "#", with: "")
@@ -37,8 +37,8 @@ struct StartButton: ButtonStyle {
         configuration.label
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
-            .background(Color.lightPrimary)
-            .foregroundColor(.white)
+            .background(Color.buttonColour)
+            .foregroundColor(Color.textColour)
             .cornerRadius(30)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
     }
@@ -49,8 +49,8 @@ struct OptionsButton: ButtonStyle {
         configuration.label
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
-            .background(Color.lightPrimary)
-            .foregroundColor(.white)
+            .background(Color.buttonColour)
+            .foregroundColor(Color.textColour)
             .cornerRadius(30)
             .scaleEffect(0.8)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)

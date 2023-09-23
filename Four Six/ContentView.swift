@@ -23,7 +23,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.white.ignoresSafeArea()
+                Color.backgroundColour.ignoresSafeArea()
                 VStack(spacing: 10) {
                     
                     Text("4:6")
@@ -42,7 +42,7 @@ struct ContentView: View {
                             .fontWeight(.bold)
                         
                         Text("Edit")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color.linkColour)
                             .onTapGesture {
                                 showPicker = true
                             }
@@ -94,6 +94,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
                             Image(systemName: "gearshape.fill")
+                                .foregroundColor(Color.iconColour)
                         }
                     }
                 }
