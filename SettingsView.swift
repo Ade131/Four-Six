@@ -55,7 +55,7 @@ struct SettingsView: View {
                 
                 .listRowSeparatorTint(.listSeparator)
                 
-                NavigationLink(destination: Text("Acknowledgements")) {
+                NavigationLink(destination: AcknowledgementsView()) {
                     Text("Acknowledgements")
                 }
             }
@@ -74,10 +74,7 @@ struct FourSixMethodView: View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 10) {
-                Text("The 4:6 Method")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
+        
                 Text("Overview")
                     .font(.title)
                     .fontWeight(.bold)
@@ -99,6 +96,7 @@ struct FourSixMethodView: View {
                 
                 Text("The 4:6 Method has gained popularity among baristas and coffee shops worldwide. It's highly recommended for its consistency in producing great-tasting coffee, making it a favorite among coffee enthusiasts.")
             }
+            .navigationTitle("The 4:6 Method")
             .padding()
         }
     }
@@ -108,10 +106,10 @@ struct FAQView: View {
     let faqData: [(String, String)] = [
         ("What equipment do I need?", "• V60 Dripper\n• Gooseneck kettle\n• Coffee grinder\n• Filter paper\n• Digital scale"),
         ("How should I grind my coffee?", "A coarser grind than a regular V60 setting is recommended, but you can experiment with what works best for you."),
-        ("What temperature should the water be?", "Around 92-94 degrees, depending on the coffee."),
+        ("What temperature should my water be?", "It depends on the coffee! Lighter roasts can stand higher temperatures around 94-96 degrees, where darker roasts can be extracted as low as 80 degrees. Try different temparatures and see what works best for you and the cofee you're using."),
         ("How should I pour the water?", "Pour the water in circles, starting from the middle and moving ourwards to the edge. Make sure that all of the grounds are covered on the first pour. Each pour should take 6-10 seconds."),
         ("What if there's still water draining when I start the next pour?", "Ideally the water should completely drain before you begin the next pour. You could try grinding coarser, pouring faster, or changing the filter. Bleached filters made in the Netherlands are known to have a slower drain time than the filters manufactured in Japan."),
-        ("How long does it usually take to brew using the 4:6 method?", "Usually about 3:30 - 4 minutes, depending on how long the final drawdown process takes"),
+        ("How long does it usually take to brew using the 4:6 method?", "It depends on your strength setting. Stronger coffee requires more pours, which will increase the brewing time. On average, a finished cup will take around 4 minutes from the first pour."),
     ]
     
     var body: some View {
@@ -127,9 +125,23 @@ struct FAQView: View {
             .listRowBackground(Color.listColour)
             .padding()
         }
+        .navigationTitle("FAQ")
         .scrollContentBackground(.hidden)
         .background(Color.backgroundColour)
     }
+}
+
+struct AcknowledgementsView: View {
+    var body: some View {
+        ZStack {
+            Color.backgroundColour.ignoresSafeArea()
+            VStack {
+                
+            }
+        }
+        .navigationTitle("Acknowledgements")
+    }
+        
 }
 
 #Preview {

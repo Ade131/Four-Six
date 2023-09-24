@@ -70,7 +70,7 @@ struct ContentView: View {
                     }
                     .padding(.top)
                     
-                    Button("Brew Options") {
+                    Button("Options") {
                         showOptions.toggle()
                     }
                     .sheet(isPresented: $showOptions) {
