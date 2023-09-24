@@ -11,7 +11,8 @@ struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
-    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0
+    //Saved settings
+    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Appearance Selection
     
     var body: some View {
         List {

@@ -12,8 +12,8 @@ struct Four_SixApp: App {
     //Create instance of CoffeeBrewingModel
     let coffeeModel = CoffeeBrewingModel()
     
-    //Dark/Light Preference
-    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0
+    //AppStorage settings
+    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference
     
     var appearanceSwitch: ColorScheme? {
         if appearanceSelection == 1 {
