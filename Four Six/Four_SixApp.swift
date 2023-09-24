@@ -9,12 +9,14 @@ import SwiftUI
 
 @main
 struct Four_SixApp: App {
+    
     //Create instance of CoffeeBrewingModel
     let coffeeModel = CoffeeBrewingModel()
     
     //AppStorage settings
     @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference
     
+    //Appearance settings
     var appearanceSwitch: ColorScheme? {
         if appearanceSelection == 1 {
             return .light

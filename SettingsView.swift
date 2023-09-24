@@ -83,7 +83,7 @@ struct FourSixMethodView: View {
                     .fontWeight(.bold)
                     .padding(.top, 10)
                 
-                Text("The 4:6 Method is a popular pour-over coffee brewing technique that was pioneered by Tetsu Kasuya, who won the World Brewers Cup in 2016 using this method. The name '4:6' comes from the way water is divided during the brewing process, with 40% of the water poured in the first stage and 60% in the second stage.")
+                Text("The 4:6 Method is a popular pour-over coffee brewing technique that was pioneered by Tetsu Kasuya, who won the World Brewers Cup in 2016. The name '4:6' comes from the way water is divided during the brewing process, with 40% of the water poured in the first stage and 60% in the second stage.")
                 
                 Text("Customizable Flavor")
                     .font(.title)
@@ -111,6 +111,7 @@ struct FAQView: View {
         ("What temperature should the water be?", "Around 92-94 degrees, depending on the coffee."),
         ("How should I pour the water?", "Pour the water in circles, starting from the middle and moving ourwards to the edge. Make sure that all of the grounds are covered on the first pour. Each pour should take 6-10 seconds."),
         ("What if there's still water draining when I start the next pour?", "Ideally the water should completely drain before you begin the next pour. You could try grinding coarser, pouring faster, or changing the filter. Bleached filters made in the Netherlands are known to have a slower drain time than the filters manufactured in Japan."),
+        ("How long does it usually take to brew using the 4:6 method?", "Usually about 3:30 - 4 minutes, depending on how long the final drawdown process takes"),
     ]
     
     var body: some View {
