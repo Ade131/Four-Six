@@ -18,16 +18,16 @@ struct Four_SixApp: App {
     
     //Appearance settings
     var appearanceSwitch: ColorScheme? {
-        if appearanceSelection == 1 {
-            return .light
-        } 
-        else if appearanceSelection == 2 {
+            if appearanceSelection == 1 {
+                return .light
+            }
+            else if appearanceSelection == 2 {
                 return .dark
             }
             else {
                 return .none
             }
-    }
+        }
     
     var body: some Scene {
         WindowGroup {
