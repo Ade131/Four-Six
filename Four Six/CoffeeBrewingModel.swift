@@ -57,7 +57,7 @@ class CoffeeBrewingModel: ObservableObject {
         }
         pours.append(Int(firstPour))
         pours.append(Int(secondPour))
-    
+        
         //Calculate remaining pours based on strength
         var remainingPoursCount = 0
         switch strength {
@@ -78,8 +78,14 @@ class CoffeeBrewingModel: ObservableObject {
         }
     }
     
-    //Other settings
-    @Published var audioEnabled: Bool = false
+    
+    //Audio settings
+    //Saved settings
+    @Published var audioEnabled: Bool = UserDefaults.standard.bool(forKey: "muteSounds") {
+        didSet {
+            UserDefaults.standard.set(audioEnabled, forKey: "muteSounds")
+        }
+    }
     
     //Function to toggle audio settings
     func toggleAudio() {

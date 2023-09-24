@@ -14,6 +14,8 @@ extension Color {
     static let textColour = Color("Text")
     static let iconColour = Color("Icon")
     static let linkColour = Color("Link Text")
+    static let listColour = Color("List Items")
+    static let listSeparator = Color("List Separator")
 
     
     init(hex: String) {

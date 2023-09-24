@@ -9,13 +9,33 @@ import SwiftUI
 
 @main
 struct Four_SixApp: App {
+    
     //Create instance of CoffeeBrewingModel
     let coffeeModel = CoffeeBrewingModel()
     
+    //AppStorage settings
+    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference
+    
+    //Appearance settings
+    var appearanceSwitch: ColorScheme? {
+            if appearanceSelection == 1 {
+                return .light
+            }
+            else if appearanceSelection == 2 {
+                return .dark
+            }
+            else {
+                return .none
+            }
+        }
+    
     var body: some Scene {
         WindowGroup {
-            //Pass coffeemodel to ContentView
-            ContentView().environmentObject(coffeeModel)
+            ContentView()
+            //Pass coffeeModel
+                .environmentObject(coffeeModel)
+            //Appearance Preference
+                .preferredColorScheme(appearanceSwitch)
         }
     }
 }
