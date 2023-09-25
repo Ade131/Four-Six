@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+//Constants for readability
+let preTimerSeconds = 5
+let pourTimeSeconds = 10
+let waitTimeSeconds = 25
+
 struct BrewingView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
@@ -14,71 +19,75 @@ struct BrewingView: View {
     @State private var totalPouredWeight = 0 //Weight poured
     @State private var currentPourNumber = 0 // Initialize to 0
     @State private var currentTime: Int = 0 // Total brewing time in seconds
-    @State private var stageTime: Int = 5 // Time for each stage in seconds
+    @State private var stageTime = preTimerSeconds
     @State private var timer: Timer? // The timer
     @State private var totalTimeTimer: Timer? // Main total timer
-    @State private var currentInstruction: String = "Get Ready"
-    @State private var preTimerDone: Bool = false
-    @State private var isDripping = false
-    @State private var isBrewing = false
-    @State private var isPaused = false
+    @State private var currentInstruction = "Get Ready" // Current instruction text
+    @State private var preTimerDone: Bool = false // pretimer flag
+    @State private var isDripping = false // drawdown flag
+    @State private var isBrewing = false // brew active flag
+    @State private var isPaused = false // pause timer flag
     
     var body: some View {
-        VStack {
-            
-            Text("Brewing Process")
-                .font(.largeTitle)
-                .padding(.top, 20)
-            
-            Text(formatTime(currentTime))
-                .font(.title)
-            
-            Spacer()
-            
-            Text(formatTime(stageTime))
-                .font(.system(size: 36))
-                .padding(.bottom, 20)
-            
-            Text(currentInstruction)
-                .font(.system(size: 24))
-            
-            Spacer()
-            
-            ZStack {
-                HStack {
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        if isPaused {
-                            resumeBrewing()
-                        } else if isBrewing {
-                            pauseBrewing()
-                        } else {
-                            startBrewing()
+        //UI
+        ZStack {
+            Color.backgroundColour.ignoresSafeArea()
+            VStack {
+                Text("Brewing Process")
+                    .font(.largeTitle)
+                    .padding(.top, 20)
+                
+                Text(formatTime(currentTime))
+                    .font(.title)
+                
+                Spacer()
+                
+                Text(formatTime(stageTime))
+                    .font(.system(size: 36))
+                    .padding(.bottom, 20)
+                
+                Text(currentInstruction)
+                    .font(.system(size: 24))
+                
+                Spacer()
+                
+                ZStack {
+                    //Pause / Skip buttons
+                    HStack {
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            if isPaused {
+                                resumeBrewing()
+                            } else if isBrewing {
+                                pauseBrewing()
+                            } else {
+                                startBrewing()
+                            }
+                            isBrewing.toggle()
+                        }) {
+                            Image(systemName: isBrewing ? "pause.fill" : "play.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.blue)
                         }
-                        isBrewing.toggle()
-                    }) {
-                        Image(systemName: isBrewing ? "pause.fill" : "play.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.blue)
+                        
+                        Spacer()
                     }
                     
-                    Spacer()
-                }
-                
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        self.moveToNextStage()
-                    }) {
-                        Image(systemName: "forward.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.blue)
-                            .padding(.trailing, 20)
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            self.moveToNextStage()
+                        }) {
+                            Image(systemName: "forward.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.blue)
+                                .padding(.trailing, 20)
+                        }
                     }
                 }
             }
@@ -99,14 +108,16 @@ struct BrewingView: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
+    //Begin the brewing logic
     private func startBrewing() {
         //5 seconds pre timer
-        self.stageTime = 5
+        self.stageTime = preTimerSeconds
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.currentInstruction = "Get Ready"
             //Decrease time
             self.stageTime -= 1
             
+            //Move to pours once pretimer complete
             if self.stageTime < 0 {
                 self.preTimerDone = true
                 //reset time
@@ -117,16 +128,7 @@ struct BrewingView: View {
         }
     }
     
-    private func pauseBrewing() {
-        timer?.invalidate()
-        isPaused = true
-    }
-    
-    private func resumeBrewing() {
-        isPaused = false
-        schedulePours()
-    }
-    
+    //Brewing begins, pours set up
     private func startPours() {
         //reset variables
         self.currentPourNumber = 0
@@ -136,11 +138,12 @@ struct BrewingView: View {
         let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
         self.totalPouredWeight += firstPourAmount
         self.currentInstruction = "Pour \(firstPourAmount)g - (\(totalPouredWeight)g total)"
-        self.stageTime = 10 // Set the first pour time to 10 seconds
+        self.stageTime = pourTimeSeconds // Set the first pour time to 10 seconds
         isDripping = true
         schedulePours()
     }
     
+    //Timer logic for pours
     private func schedulePours() {
         
         totalTimeTimer?.invalidate()
@@ -159,6 +162,7 @@ struct BrewingView: View {
         }
     }
     
+    //Next stage once timer is complete / skip button pressed
     private func moveToNextStage() {
         if self.currentPourNumber >= coffeeModel.pours.count {
             self.timer?.invalidate()
@@ -169,12 +173,12 @@ struct BrewingView: View {
         if isDripping {
             self.currentInstruction = "Wait for next pour"
             self.currentPourNumber += 1
-            self.stageTime = 35
+            self.stageTime = waitTimeSeconds
         } else {
             let pourAmount = coffeeModel.pours[self.currentPourNumber]
             self.totalPouredWeight += pourAmount
             self.currentInstruction = "Pour \(pourAmount)g - (\(self.totalPouredWeight)g total)"
-            self.stageTime = 10
+            self.stageTime = pourTimeSeconds
         }
         
         // Skip the waiting time after the last pour
@@ -184,10 +188,23 @@ struct BrewingView: View {
         
         isDripping.toggle()
     }
+    
+    //Logic for pause/resume while brewing
+    private func pauseBrewing() {
+        timer?.invalidate()
+        isPaused = true
+    }
+    
+    private func resumeBrewing() {
+        isPaused = false
+        schedulePours()
+    }
 }
 
 
-#Preview {
-    BrewingView()
-        .environmentObject(CoffeeBrewingModel())
+// For preview
+struct BrewingView_Previews: PreviewProvider {
+    static var previews: some View {
+        BrewingView().environmentObject(CoffeeBrewingModel())
+    }
 }
