@@ -28,13 +28,20 @@ struct BrewingView: View {
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
     
+    //Calculate current / total pours for brewing progress
+    var currentStep: Int = 0
+    
+    var totalSteps: Int {
+        return coffeeModel.pours.count * 2
+    }
+    
     var body: some View {
         //UI
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
-                Text("Brewing Process")
-                    .font(.largeTitle)
+                Text("Stage \(currentStep) of \(totalSteps)")
+                    .font(.title)
                     .padding(.top, 20)
                 
                 Text(formatTime(currentTime))
@@ -48,6 +55,9 @@ struct BrewingView: View {
                 
                 Text(currentInstruction)
                     .font(.system(size: 24))
+                
+                Text("\(totalPouredWeight)g total")
+                    .font(.system(size: 16))
                 
                 Spacer()
                 
@@ -70,23 +80,23 @@ struct BrewingView: View {
                             Image(systemName: isBrewing ? "pause.fill" : "play.fill")
                                 .resizable()
                                 .frame(width: 40, height: 40)
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color.buttonColour)
                         }
                         
                         Spacer()
                     }
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            self.moveToNextStage()
-                        }) {
-                            Image(systemName: "forward.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.blue)
-                                .padding(.trailing, 20)
+                    if preTimerDone && currentPourNumber < (coffeeModel.pours.count - 1) {
+                        HStack {
+                            Spacer()
+                            
+                            Button(action: {
+                                self.moveToNextStage()
+                            }) {
+                                Image(systemName: "forward.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(Color.buttonColour)                                .padding(.trailing, 20)
+                            }
                         }
                     }
                 }
@@ -137,7 +147,7 @@ struct BrewingView: View {
         //Initialise the first pour
         let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
         self.totalPouredWeight += firstPourAmount
-        self.currentInstruction = "Pour \(firstPourAmount)g - (\(totalPouredWeight)g total)"
+        self.currentInstruction = "Pour \(firstPourAmount)g"
         self.stageTime = pourTimeSeconds // Set the first pour time to 10 seconds
         isDripping = true
         schedulePours()
@@ -172,13 +182,13 @@ struct BrewingView: View {
         
         if isDripping {
             self.currentInstruction = "Wait for next pour"
-            self.currentPourNumber += 1
             self.stageTime = waitTimeSeconds
         } else {
             let pourAmount = coffeeModel.pours[self.currentPourNumber]
             self.totalPouredWeight += pourAmount
-            self.currentInstruction = "Pour \(pourAmount)g - (\(self.totalPouredWeight)g total)"
+            self.currentInstruction = "Pour \(pourAmount)g"
             self.stageTime = pourTimeSeconds
+            self.currentPourNumber += 1
         }
         
         // Skip the waiting time after the last pour
