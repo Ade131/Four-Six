@@ -27,10 +27,9 @@ struct BrewingView: View {
     @State private var isDripping = false // drawdown flag
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
+    @State private var currentStep: Int = 0 // Current step
     
-    //Calculate current / total pours for brewing progress
-    var currentStep: Int = 0
-    
+    //Calculate total pours for brewing progress
     var totalSteps: Int {
         return coffeeModel.pours.count * 2
     }
@@ -111,13 +110,6 @@ struct BrewingView: View {
         }
     }
     
-    //Func to convert time in seconds to minutes:seconds
-    private func formatTime(_ seconds: Int) -> String {
-        let minutes = seconds / 60
-        let seconds = seconds % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
     //Begin the brewing logic
     private func startBrewing() {
         //5 seconds pre timer
@@ -143,6 +135,7 @@ struct BrewingView: View {
         //reset variables
         self.currentPourNumber = 0
         self.totalPouredWeight = 0
+        self.currentStep += 1 //incr step
         
         //Initialise the first pour
         let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
@@ -174,7 +167,10 @@ struct BrewingView: View {
     
     //Next stage once timer is complete / skip button pressed
     private func moveToNextStage() {
-        if self.currentPourNumber >= coffeeModel.pours.count {
+        self.currentStep += 1 //incr step
+        
+        //Check if brew is complete
+        if self.currentPourNumber >= coffeeModel.pours.count - 1 {
             self.timer?.invalidate()
             self.currentInstruction = "Remove dripper when finished"
             return
@@ -191,11 +187,6 @@ struct BrewingView: View {
             self.currentPourNumber += 1
         }
         
-        // Skip the waiting time after the last pour
-        if self.currentPourNumber >= coffeeModel.pours.count - 1 {
-            self.stageTime = 0
-        }
-        
         isDripping.toggle()
     }
     
@@ -209,6 +200,13 @@ struct BrewingView: View {
         isPaused = false
         schedulePours()
     }
+}
+
+//Func to convert time in seconds to minutes:seconds
+private func formatTime(_ seconds: Int) -> String {
+    let minutes = seconds / 60
+    let seconds = seconds % 60
+    return String(format: "%02d:%02d", minutes, seconds)
 }
 
 
