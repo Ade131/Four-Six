@@ -18,17 +18,6 @@ struct OptionsView: View {
                     .font(.largeTitle)
                     .padding()
                 
-                //Ratio Selection
-                Text("Ratio")
-                    .font(.headline)
-                Picker("Ratio", selection: $coffeeModel.ratio) {
-                    Text("1:15").tag(15)
-                    Text("1:16").tag(16)
-                    Text("1:17").tag(17)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                
                 //Taste selection
                 Text("Balance")
                     .font(.headline)
@@ -47,6 +36,17 @@ struct OptionsView: View {
                     Text("Strong").tag("Strong")
                     Text("Medium").tag("Medium")
                     Text("Lightest").tag("Light")
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                
+                //Ratio Selection
+                Text("Ratio")
+                    .font(.headline)
+                Picker("Ratio", selection: $coffeeModel.ratio) {
+                    Text("1:15").tag(15)
+                    Text("1:16").tag(16)
+                    Text("1:17").tag(17)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
