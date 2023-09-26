@@ -65,16 +65,18 @@ struct BrewingView: View {
                                 .animation(.linear(duration: 1), value: stageTime)
                         )
                     
-                    VStack {
+                    VStack(alignment: .center) {
                         
                         Text(currentInstruction)
                             .font(.system(size: 20))
+                            .multilineTextAlignment(.center)
                         
                             Text(formatTime(stageTime))
                                 .font(.system(size: 36))
                                 .monospacedDigit()
                     }
                 }
+                .frame(height: 300)
                 .padding()
                 
                 
@@ -85,7 +87,7 @@ struct BrewingView: View {
                 
                 ZStack {
                     //Pause / Skip buttons
-                    if currentInstruction != "Remove dripper" {
+                    if currentInstruction != "Remove dripper\nwhen finished" {
                         HStack {
                             
                             Spacer()
@@ -123,12 +125,13 @@ struct BrewingView: View {
                             }
                         }
                     } else {
-                        Button("Done") {
+                        Button(" Done ") {
                             presentationMode.wrappedValue.dismiss()
                         }
                         .buttonStyle(StartButton())
                     }
                 }
+                .frame(height: 100)
             }
         }
         .onAppear {
@@ -239,7 +242,7 @@ struct BrewingView: View {
         
         //Check if brew is complete
         if self.currentPourNumber >= coffeeModel.pours.count - 1 {
-            self.currentInstruction = "Remove dripper"
+            self.currentInstruction = "Remove dripper\nwhen finished"
             self.stageTime = 0
             return
         }
