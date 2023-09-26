@@ -24,7 +24,7 @@ struct ContentView: View {
     
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.backgroundColour.ignoresSafeArea()
                 VStack(spacing: 10) {
@@ -72,47 +72,44 @@ struct ContentView: View {
                         .frame(height: pickerHeight)
                         .clipped()
                     }
+                    
+                    VStack(spacing: 3) {
+                        Text("Prepare")
+                            .font(.headline)
+                        Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text("of ground coffee")
+                            .font(.headline)
                         
-                        VStack(spacing: 3) {
-                            Text("Prepare")
-                                .font(.headline)
-                            Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
-                                .font(.title)
-                                .fontWeight(.bold)
-                            Text("of ground coffee")
-                                .font(.headline)
-                            
-                            NavigationLink("", destination: BrewingView(), isActive: $navigateToBrew)
-                                .hidden()
-                        }
-                        .padding(.top)
-                        
-                        Button("Options") {
-                            showOptions.toggle()
-                        }
-                        .sheet(isPresented: $showOptions) {
-                            OptionsView()
-                        }
-                        .buttonStyle(OptionsButton())
-                        .padding()
-                        
-                        Button("Start Brewing") {
-                            if let waterWeight = Double(waterInput) {
-                                coffeeModel.updateWaterWeight(weight: waterWeight)
-                                coffeeModel.calculatePours()
-                                navigateToBrew = true
-                            }
-                        }
-                        .buttonStyle(StartButton())
-                        
-                        Spacer()
                     }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
-                                Image(systemName: "gearshape.fill")
-                                    .foregroundColor(Color.iconColour)
-                            }
+                    .padding(.top)
+                    
+                    Button("Options") {
+                        showOptions.toggle()
+                    }
+                    .sheet(isPresented: $showOptions) {
+                        OptionsView()
+                    }
+                    .buttonStyle(OptionsButton())
+                    .padding()
+                    
+                    Button(action: {
+                        startBrew()
+                    }) {
+                        Text("Start Brewing")
+                    }
+                    .buttonStyle(StartButton())
+                    .navigationDestination(isPresented: $navigateToBrew, destination: { BrewingView() })
+                    
+                    
+                    Spacer()
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(Color.iconColour)
                         }
                     }
                 }
@@ -120,10 +117,20 @@ struct ContentView: View {
         }
     }
     
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
-                .environmentObject(CoffeeBrewingModel())
+    //Logic when pressing start button
+    func startBrew() {
+        if let waterWeight = Double(waterInput) {
+            coffeeModel.updateWaterWeight(weight: waterWeight)
+            coffeeModel.calculatePours()
         }
+        self.navigateToBrew = true
     }
-    
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(CoffeeBrewingModel())
+    }
+}
+
