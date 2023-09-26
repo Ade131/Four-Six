@@ -102,9 +102,15 @@ class CoffeeBrewingModel: ObservableObject {
     
     //Audio settings
     //Saved settings
-    @Published var audioEnabled: Bool = UserDefaults.standard.bool(forKey: "muteSounds") {
+    @Published var audioEnabled: Bool = UserDefaults.standard.bool(forKey: "sound") {
         didSet {
-            UserDefaults.standard.set(audioEnabled, forKey: "muteSounds")
+            UserDefaults.standard.set(audioEnabled, forKey: "sound")
+        }
+    }
+    
+    @Published var vibrateEnabled: Bool = UserDefaults.standard.bool(forKey: "vibrate") {
+        didSet {
+            UserDefaults.standard.set(vibrateEnabled, forKey: "vibrate")
         }
     }
     

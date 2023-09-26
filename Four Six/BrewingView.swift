@@ -47,9 +47,12 @@ struct BrewingView: View {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
                 Text("Stage \(currentStep) of \(totalSteps + 1)")
-                    .font(.title)
-                    .padding(.top, 20)
+                    .font(.system(size: 20))
+                    .padding(6)
                     .monospacedDigit()
+                
+                Text("Total Time")
+                    .font(.footnote)
                 
                 Text(formatTime(currentTime))
                     .font(.title)
@@ -70,7 +73,7 @@ struct BrewingView: View {
                     VStack(alignment: .center) {
                         
                         Text(currentInstruction)
-                            .font(.system(size: 20))
+                            .font(.system(size: 30))
                             .multilineTextAlignment(.center)
                         
                             Text(formatTime(stageTime))
@@ -191,7 +194,10 @@ struct BrewingView: View {
             stageProgress = 1.0
         }
         
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        //Vibrate on stage transition if enabled
+        if coffeeModel.vibrateEnabled {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        }
         
         // Move to the next step if not complete
         if !isComplete {

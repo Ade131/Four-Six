@@ -17,9 +17,13 @@ struct SettingsView: View {
     var body: some View {
         List {
             Section(header: Text("Settings")) {
-                Toggle("Mute Sounds", isOn: $coffeeModel.audioEnabled)
+                Toggle("Sounds", isOn: $coffeeModel.audioEnabled)
                 
-                    .listRowSeparatorTint(.listColour)
+                    .listRowSeparatorTint(.listSeparator)
+                
+                Toggle("Vibrate", isOn: $coffeeModel.vibrateEnabled)
+                
+                    .listRowSeparatorTint(.listSeparator)
                 
                 Picker(selection: $appearanceSelection) {
                     Text("System")
