@@ -110,6 +110,7 @@ struct FAQView: View {
         ("How should I pour the water?", "Pour the water in circles, starting from the middle and moving ourwards to the edge. Make sure that all of the grounds are covered on the first pour. Each pour should take 6-10 seconds."),
         ("What if there's still water draining when I start the next pour?", "Ideally the water should completely drain before you begin the next pour. You could try grinding coarser, pouring faster, or changing the filter. Bleached filters made in the Netherlands are known to have a slower drain time than the filters manufactured in Japan. 45 seconds between pours is just a guideline, and you can always pause the brew timer while you wait for the water to drain."),
         ("How long does it usually take to brew using the 4:6 method?", "It depends on your strength setting. Stronger coffee requires more pours, which will increase the brewing time. On average, a finished cup will take around 4 minutes from the first pour."),
+        ("Why is my final weight more/less than what I assigned?", "The pour size measurements are rounded to make brewing easier, which may mean a few extra ml of water at the end of the process")
     ]
     
     var body: some View {

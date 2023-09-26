@@ -74,7 +74,7 @@ class CoffeeBrewingModel: ObservableObject {
         
         let remainingPourSize = Int((secondStage / Double(remainingPoursCount)).rounded())
         var remainingPourSum = 0
-        for _ in 1..<remainingPoursCount {
+        for _ in 0..<remainingPoursCount {
             pours.append(remainingPourSize)
             remainingPourSum += remainingPourSize
         }

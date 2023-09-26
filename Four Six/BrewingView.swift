@@ -30,6 +30,7 @@ struct BrewingView: View {
     @State private var isDripping = false // drawdown flag
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
+    @State private var isComplete = false //brewing complete flag
     @State private var currentStep: Int = 0 // Current step
     //Animation Variables
     @State private var stageProgress: Double = 1.0 // Smooth timer progress
@@ -45,7 +46,7 @@ struct BrewingView: View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
-                Text("Stage \(currentStep) of \(totalSteps)")
+                Text("Stage \(currentStep) of \(totalSteps + 1)")
                     .font(.title)
                     .padding(.top, 20)
                     .monospacedDigit()
@@ -86,13 +87,12 @@ struct BrewingView: View {
                 
                 Spacer()
                 
+                //Pause / Skip / Done buttons
                 ZStack {
-                    //Pause / Skip buttons
-                    if currentInstruction != "Remove dripper\nwhen finished" {
+                    //Show pause/skip button if running
+                    if !isComplete {
                         HStack {
-                            
                             Spacer()
-                            
                             Button(action: {
                                 if isPaused {
                                     resumeBrewing()
@@ -111,7 +111,8 @@ struct BrewingView: View {
                             
                             Spacer()
                         }
-                        if preTimerDone && currentPourNumber < (coffeeModel.pours.count - 1) {
+                        //Show 'skip' button if not at last stage
+                        if preTimerDone && currentPourNumber < (coffeeModel.pours.count) {
                             HStack {
                                 Spacer()
                                 
@@ -125,6 +126,7 @@ struct BrewingView: View {
                                 }
                             }
                         }
+                    //show 'done' button if complete
                     } else {
                         Button(" Done ") {
                             presentationMode.wrappedValue.dismiss()
@@ -148,125 +150,90 @@ struct BrewingView: View {
         })
     }
     
-    //Begin the brewing logic
     private func startBrewing() {
-        //5 seconds pre timer
-        self.stageTime = preTimerSeconds
-        
-        //set up animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation {
-                shouldAnimateProgress = true
-            }
-        }
-        
-        //Timer logic
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            self.currentInstruction = "Get Ready"
-            //Decrease time
-            self.stageTime -= 1
-            // Calculate the stage progress
-            self.stageProgress = Double(self.stageTime) / Double(preTimerSeconds)
-            
-            //Move to pours once pretimer complete
-            if self.stageTime < 0 {
-                self.preTimerDone = true
-                //reset time
-                timer.invalidate()
-                //Start the brewing
-                startPours()
-            }
-        }
-    }
-    
-    //Brewing begins, pours set up
-    private func startPours() {
-        //reset variables
-        self.currentPourNumber = 0
+        self.preTimerDone = false
+        self.currentStep = 0
         self.totalPouredWeight = 0
-        self.currentStep += 1 //incr step
+        self.currentPourNumber = 0
         
-        withAnimation(.none) {
-               shouldAnimateProgress = false
-               stageProgress = 1.0
-           }
-        
-        //Initialise the first pour
-        let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
-        self.totalPouredWeight += firstPourAmount
-        self.currentInstruction = "Pour \(firstPourAmount)g"
-        self.stageTime = pourTimeSeconds // Set the first pour time to 10 seconds
-        isDripping = true
-        
-        //Set up animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation {
                 shouldAnimateProgress = true
             }
         }
         
-        schedulePours()
+        scheduleUniversalTimer()
     }
-    
-    //Timer logic for pours
-    private func schedulePours() {
+
+    private func scheduleUniversalTimer() {
+        self.timer?.invalidate()
+        self.totalTimeTimer?.invalidate()
         
-        totalTimeTimer?.invalidate()
-        totalTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {_ in
+        totalTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if self.preTimerDone {
                 self.currentTime += 1
             }
         }
-        
+
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.stageTime -= 1
-            // Calculate the stage progress
             self.stageProgress = Double(self.stageTime) / Double(currentMaxTime())
             
             if self.stageTime < 0 {
-                self.moveToNextStage()
+                moveToNextStage()
             }
         }
     }
-    
-    //Next stage once timer is complete / skip button pressed
+
     private func moveToNextStage() {
-        
         withAnimation(.none) {
-               shouldAnimateProgress = false
-               stageProgress = 1.0
-           }
+            shouldAnimateProgress = false
+            stageProgress = 1.0
+        }
         
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         
-        
-        //Check if brew is complete
-        if self.currentPourNumber >= coffeeModel.pours.count - 1 {
-            self.currentInstruction = "Remove dripper\nwhen finished"
-            self.stageTime = 0
-            return
+        // Move to the next step if not complete
+        if !isComplete {
+            self.currentStep += 1
         }
         
-        if isDripping {
-            self.currentInstruction = "Wait for next pour"
-            self.stageTime = waitTimeSeconds
-        } else {
+        if self.currentStep == 1 {
+            self.preTimerDone = true
             let pourAmount = coffeeModel.pours[self.currentPourNumber]
             self.totalPouredWeight += pourAmount
             self.currentInstruction = "Pour \(pourAmount)g"
             self.stageTime = pourTimeSeconds
             self.currentPourNumber += 1
+            isDripping.toggle()
+        } else if self.currentPourNumber >= coffeeModel.pours.count {
+            self.currentInstruction = "Remove dripper\nwhen finished"
+            isComplete = true
+            self.stageTime = 0
+            return
+        } else {
+            if isDripping {
+                self.currentInstruction = "Wait for next pour"
+                self.stageTime = waitTimeSeconds
+            } else {
+                let pourAmount = coffeeModel.pours[self.currentPourNumber]
+                self.totalPouredWeight += pourAmount
+                self.currentInstruction = "Pour \(pourAmount)g"
+                self.stageTime = pourTimeSeconds
+                self.currentPourNumber += 1
+            }
+            isDripping.toggle()
         }
         
-        self.currentStep += 1 //incr step
-        isDripping.toggle()
+        self.stageProgress = Double(self.stageTime) / Double(currentMaxTime())
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation {
-                    shouldAnimateProgress = true
-                }
+            withAnimation {
+                shouldAnimateProgress = true
             }
+        }
     }
+
     
     //Logic for pause/resume while brewing
     private func pauseBrewing() {
@@ -276,7 +243,7 @@ struct BrewingView: View {
     
     private func resumeBrewing() {
         isPaused = false
-        schedulePours()
+        scheduleUniversalTimer()
     }
     
     //Function to get the current stage time for the timer
