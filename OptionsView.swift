@@ -28,34 +28,32 @@ struct OptionsView: View {
                     Text("Brighter").tag("Brighter")
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .padding()
                 
                 // Strength selection
                 Text("Strength")
                     .font(.headline)
+                    .padding(.top, 30)
                 Picker("Strength", selection: $coffeeModel.strength) {
                     Text("Light").tag("Light")
                     Text("Medium").tag("Medium")
                     Text("Strong").tag("Strong")
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .padding()
                 
                 
                 Text("Advanced")
                     .font(.caption)
-                    .padding(.top)
-                
+                    .padding(.top, 20)
                 //Ratio Selection
                 Text("Ratio")
                     .font(.headline)
+
                 Picker("Ratio", selection: $coffeeModel.ratio) {
                     Text("1:15").tag(15)
                     Text("1:16").tag(16)
                     Text("1:17").tag(17)
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .padding()
                 
                 Spacer()
             }
