@@ -113,7 +113,7 @@ struct FourSixMethodView: View {
                     .fontWeight(.bold)
                     .padding(.top, 10)
                 
-                Text("The 4:6 Method has gained popularity among baristas and coffee shops worldwide. It's highly recommended for its consistency in producing great-tasting coffee, making it a favorite among coffee enthusiasts.")
+                Text("The 4:6 Method has gained popularity among baristas and coffee shops worldwide. It's highly recommended for its consistency in producing great-tasting coffee, making it a favourite among coffee enthusiasts.")
             }
             .navigationTitle("The 4:6 Method")
             .navigationBarBackButtonHidden(true)
@@ -181,7 +181,8 @@ struct AcknowledgementsView: View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
-                
+                Text("Sound from Zapsplat.com")
+                    .font(.footnote)
             }
         }
         .navigationTitle("Acknowledgements")

@@ -14,6 +14,8 @@
 		708F887D2A61651100710FCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 708F887C2A61651100710FCE /* Assets.xcassets */; };
 		708F88802A61651100710FCE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 708F887F2A61651100710FCE /* Preview Assets.xcassets */; };
 		70A335D62ABB3DB20061FBA3 /* CoffeeBrewingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */; };
+		70B5EE772AC387860015AA7D /* countdown.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70B5EE762AC387860015AA7D /* countdown.mp3 */; };
+		70B5EE792AC387DA0015AA7D /* finish.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70B5EE782AC387DA0015AA7D /* finish.mp3 */; };
 		70E4F4A02ABBADA300ED6A71 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */; };
 		70E4F4A22ABBB88A00ED6A71 /* BrewingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */; };
 /* End PBXBuildFile section */
@@ -27,6 +29,8 @@
 		708F887C2A61651100710FCE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		708F887F2A61651100710FCE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeBrewingModel.swift; sourceTree = "<group>"; };
+		70B5EE762AC387860015AA7D /* countdown.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = countdown.mp3; sourceTree = "<group>"; };
+		70B5EE782AC387DA0015AA7D /* finish.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = finish.mp3; sourceTree = "<group>"; };
 		70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OptionsView.swift; path = ../OptionsView.swift; sourceTree = "<group>"; };
 		70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,6 +72,7 @@
 				7088A5E12ABDEB3C005B4A87 /* SettingsView.swift */,
 				70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */,
 				7088A5DF2ABDD85B005B4A87 /* UIElements.swift */,
+				70B5EE712AC3830C0015AA7D /* Sounds */,
 				708F887C2A61651100710FCE /* Assets.xcassets */,
 				708F887E2A61651100710FCE /* Preview Content */,
 			);
@@ -80,6 +85,15 @@
 				708F887F2A61651100710FCE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		70B5EE712AC3830C0015AA7D /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				70B5EE762AC387860015AA7D /* countdown.mp3 */,
+				70B5EE782AC387DA0015AA7D /* finish.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,7 +154,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70B5EE792AC387DA0015AA7D /* finish.mp3 in Resources */,
 				708F88802A61651100710FCE /* Preview Assets.xcassets in Resources */,
+				70B5EE772AC387860015AA7D /* countdown.mp3 in Resources */,
 				708F887D2A61651100710FCE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

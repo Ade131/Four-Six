@@ -14,6 +14,10 @@ let preTimerSeconds = 3
 let pourTimeSeconds = 10
 let waitTimeSeconds = 35
 
+//Sounds
+private var countdownAudioPlayer: AVAudioPlayer?
+private var finishAudioPlayer: AVAudioPlayer?
+
 struct BrewingView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>  // For navigation
@@ -26,17 +30,17 @@ struct BrewingView: View {
     @State private var timer: Timer? // The timer
     @State private var totalTimeTimer: Timer? // Main total timer
     @State private var currentInstruction = "Get Ready" // Current instruction text
-    @State private var preTimerDone: Bool = false // pretimer flag
+    @State private var currentStep: Int = 0 // Current step
+    //Flags
+    @State private var preTimerDone = false // pretimer flag
     @State private var isDripping = false // drawdown flag
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
     @State private var isComplete = false //brewing complete flag
-    @State private var currentStep: Int = 0 // Current step
     //Animation Variables
     @State private var stageProgress: Double = 1.0 // Smooth timer progress
     @State private var shouldAnimateProgress: Bool = false //Don't animate between steps
-    
-    //Calculate total pours for brewing progress
+    // total pours for brewing progress
     var totalSteps: Int {
         return ((coffeeModel.pours.count * 2) - 1)
     }
@@ -132,6 +136,7 @@ struct BrewingView: View {
                     //show 'done' button if complete
                     } else {
                         Button(" Done ") {
+                            stopBrewing()
                             presentationMode.wrappedValue.dismiss()
                         }
                         .buttonStyle(StartButton())
@@ -141,14 +146,18 @@ struct BrewingView: View {
             }
         }
         .onAppear {
+            //Initialize Timer
             self.totalTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                 if self.preTimerDone {
                     self.currentTime += 1
                 }
             }
+            //Prepare audio files
+            prepareAudio()
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: Button(action: {
+            stopBrewing()
             presentationMode.wrappedValue.dismiss()
         }) {
             HStack {
@@ -187,6 +196,16 @@ struct BrewingView: View {
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.stageTime -= 1
             self.stageProgress = Double(self.stageTime) / Double(currentMaxTime())
+            
+            //Play audio
+            if (self.stageTime == 2 || self.stageTime == 1) && coffeeModel.audioEnabled {
+                        countdownAudioPlayer?.currentTime = 0
+                        countdownAudioPlayer?.play()
+                    }
+            
+            if self.stageTime == 0 && coffeeModel.audioEnabled {
+                finishAudioPlayer?.play()
+            }
             
             if self.stageTime < 0 {
                 moveToNextStage()
@@ -265,6 +284,14 @@ struct BrewingView: View {
         }
         return isDripping ? Double(pourTimeSeconds) : Double(waitTimeSeconds)
     }
+    
+    //Stop brewing
+    private func stopBrewing() {
+        timer?.invalidate() // Invalidate the stage timer
+        totalTimeTimer?.invalidate() // Invalidate the total time timer
+        countdownAudioPlayer?.stop() // Stop any playing countdown audio
+        finishAudioPlayer?.stop() // Stop any playing finish audio
+    }
 
 }
 
@@ -292,6 +319,19 @@ struct CountdownCircleShape: Shape, Animatable {
                     endAngle: Angle(degrees: -90 + 360 * Double(progress)),
                     clockwise: false)
         return path
+    }
+}
+
+//Prepare the audio files
+private func prepareAudio() {
+    do {
+        if let countdownPath = Bundle.main.path(forResource: "countdown", ofType: "mp3"),
+           let finishPath = Bundle.main.path(forResource: "finish", ofType: "mp3") {
+            countdownAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: countdownPath))
+            finishAudioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: finishPath))
+        }
+    } catch {
+        print("Couldn't load audio files")
     }
 }
 

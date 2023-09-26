@@ -41,6 +41,11 @@ struct OptionsView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
                 
+                
+                Text("Advanced")
+                    .font(.caption)
+                    .padding(.top)
+                
                 //Ratio Selection
                 Text("Ratio")
                     .font(.headline)
