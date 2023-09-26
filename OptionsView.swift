@@ -33,9 +33,9 @@ struct OptionsView: View {
                 Text("Strength")
                     .font(.headline)
                 Picker("Strength", selection: $coffeeModel.strength) {
-                    Text("Strong").tag("Strong")
+                    Text("Light").tag("Light")
                     Text("Medium").tag("Medium")
-                    Text("Lightest").tag("Light")
+                    Text("Strong").tag("Strong")
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()

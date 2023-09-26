@@ -12,7 +12,7 @@ import AudioToolbox
 //Constants for readability
 let preTimerSeconds = 3
 let pourTimeSeconds = 10
-let waitTimeSeconds = 25
+let waitTimeSeconds = 35
 
 struct BrewingView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
@@ -37,7 +37,7 @@ struct BrewingView: View {
     
     //Calculate total pours for brewing progress
     var totalSteps: Int {
-        return coffeeModel.pours.count * 2
+        return ((coffeeModel.pours.count * 2) - 1)
     }
     
     var body: some View {
@@ -48,6 +48,7 @@ struct BrewingView: View {
                 Text("Stage \(currentStep) of \(totalSteps)")
                     .font(.title)
                     .padding(.top, 20)
+                    .monospacedDigit()
                 
                 Text(formatTime(currentTime))
                     .font(.title)
@@ -230,7 +231,6 @@ struct BrewingView: View {
     
     //Next stage once timer is complete / skip button pressed
     private func moveToNextStage() {
-        self.currentStep += 1 //incr step
         
         withAnimation(.none) {
                shouldAnimateProgress = false
@@ -258,6 +258,7 @@ struct BrewingView: View {
             self.currentPourNumber += 1
         }
         
+        self.currentStep += 1 //incr step
         isDripping.toggle()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
