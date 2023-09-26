@@ -80,6 +80,25 @@ class CoffeeBrewingModel: ObservableObject {
         }
     }
     
+    //Save settings for brewing preferences
+    func saveBrewSettings() {
+        UserDefaults.standard.set(self.taste, forKey: "Taste")
+        UserDefaults.standard.set(self.strength, forKey: "Strength")
+        UserDefaults.standard.set(self.ratio, forKey: "Ratio")
+    }
+    
+    func loadSettings() {
+            if let savedTaste = UserDefaults.standard.string(forKey: "Taste") {
+                self.taste = savedTaste
+            }
+            if let savedStrength = UserDefaults.standard.string(forKey: "Strength") {
+                self.strength = savedStrength
+            }
+            if let savedRatio = UserDefaults.standard.value(forKey: "Ratio") as? Int {
+                self.ratio = savedRatio
+            }
+        }
+    
     
     //Audio settings
     //Saved settings

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct OptionsView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
@@ -54,9 +55,11 @@ struct OptionsView: View {
                 Spacer()
             }
         }
-        
+        .onAppear {
+            coffeeModel.loadSettings()
+        }
         .onDisappear {
-            //apply options
+            coffeeModel.saveBrewSettings()
             coffeeModel.calculatePours()
         }
     }
@@ -64,5 +67,5 @@ struct OptionsView: View {
 
 #Preview {
     OptionsView()
-        .environmentObject(CoffeeBrewingModel()) 
+        .environmentObject(CoffeeBrewingModel())
 }
