@@ -16,6 +16,7 @@ extension Color {
     static let linkColour = Color("Link Text")
     static let listColour = Color("List Items")
     static let listSeparator = Color("List Separator")
+    static let toggleColour = Color("Toggle")
 
     
     init(hex: String) {
@@ -58,4 +59,35 @@ struct OptionsButton: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
     }
 }
+
+
+struct CoffeeToggleStyle: ToggleStyle {
+    var onColor = Color.toggleColour // Your desired "on" color
+    var offColor = Color.gray // Your desired "off" color
+
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label
+
+            Spacer()
+
+            Rectangle()
+                .frame(width: 50, height: 30)
+                .foregroundColor(configuration.isOn ? onColor : offColor)
+                .cornerRadius(15)
+                .overlay(
+                    Circle()
+                        .foregroundColor(Color.white)
+                        .padding(4)
+                        .offset(x: configuration.isOn ? 12 : -12)
+                )
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        configuration.isOn.toggle()
+                    }
+                }
+        }
+    }
+}
+ 
 

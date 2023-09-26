@@ -50,7 +50,9 @@ struct ContentView: View {
                                 withAnimation {
                                     pickerHeight = 150
                                 }
+                                
                             }
+                            .foregroundColor(Color.linkColour)
                         } else {
                             Button("Done") {
                                 withAnimation {

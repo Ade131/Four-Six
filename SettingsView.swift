@@ -18,10 +18,13 @@ struct SettingsView: View {
         List {
             Section(header: Text("Settings")) {
                 Toggle("Sounds", isOn: $coffeeModel.audioEnabled)
+                    .toggleStyle(CoffeeToggleStyle())
                 
                     .listRowSeparatorTint(.listSeparator)
                 
                 Toggle("Vibrate", isOn: $coffeeModel.vibrateEnabled)
+                    .toggleStyle(CoffeeToggleStyle())
+                
                 
                     .listRowSeparatorTint(.listSeparator)
                 
@@ -70,10 +73,22 @@ struct SettingsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.backgroundColour)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.backward")
+                Text("Back")
+            }
+            .foregroundColor(Color.linkColour)
+        })
     }
 }
 
 struct FourSixMethodView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     var body: some View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
@@ -101,12 +116,24 @@ struct FourSixMethodView: View {
                 Text("The 4:6 Method has gained popularity among baristas and coffee shops worldwide. It's highly recommended for its consistency in producing great-tasting coffee, making it a favorite among coffee enthusiasts.")
             }
             .navigationTitle("The 4:6 Method")
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                HStack {
+                    Image(systemName: "chevron.backward")
+                    Text("Back")
+                }
+                .foregroundColor(Color.linkColour)
+            })
             .padding()
         }
     }
 }
 
 struct FAQView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     let faqData: [(String, String)] = [
         ("What equipment do I need?", "• V60 Dripper\n• Gooseneck kettle\n• Coffee grinder\n• Filter paper\n• Digital scale"),
         ("How should I grind my coffee?", "A coarser grind than a regular V60 setting is recommended, but you can experiment with what works best for you."),
@@ -132,12 +159,24 @@ struct FAQView: View {
             .padding()
         }
         .navigationTitle("FAQ")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.backward")
+                Text("Back")
+            }
+            .foregroundColor(Color.linkColour)
+        })
         .scrollContentBackground(.hidden)
         .background(Color.backgroundColour)
     }
 }
 
 struct AcknowledgementsView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     var body: some View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
@@ -146,6 +185,16 @@ struct AcknowledgementsView: View {
             }
         }
         .navigationTitle("Acknowledgements")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "chevron.backward")
+                Text("Back")
+            }
+            .foregroundColor(Color.linkColour)
+        })
     }
         
 }

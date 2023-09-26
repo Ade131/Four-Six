@@ -148,8 +148,14 @@ struct BrewingView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button("Cancel") {
+        .navigationBarItems(leading: Button(action: {
             presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+                Image(systemName: "xmark")
+                Text("Cancel")
+            }
+            .foregroundColor(Color.linkColour)
         })
     }
     
