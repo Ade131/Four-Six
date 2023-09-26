@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 extension Color {
     static let backgroundColour = Color("Background")
@@ -32,6 +33,10 @@ extension Color {
 
         self.init(red: red, green: green, blue: blue)
     }
+}
+
+struct UIElements {
+    static let pickerTextColour = UIColor(named: "Text")
 }
 
 

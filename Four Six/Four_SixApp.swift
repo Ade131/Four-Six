@@ -6,12 +6,20 @@
 //
 
 import SwiftUI
+import UIKit
 
 @main
 struct Four_SixApp: App {
     
     //Create instance of CoffeeBrewingModel
     let coffeeModel = CoffeeBrewingModel()
+    
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.buttonColour)
+        if let pickerTextColor = UIElements.pickerTextColour {
+            UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: pickerTextColor], for: .selected)
+        }
+    }
     
     //AppStorage settings
     @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference

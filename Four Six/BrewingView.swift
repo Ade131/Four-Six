@@ -225,7 +225,7 @@ struct BrewingView: View {
             return
         } else {
             if isDripping {
-                self.currentInstruction = "Wait for next pour"
+                self.currentInstruction = "Let it drip"
                 self.stageTime = waitTimeSeconds
             } else {
                 let pourAmount = coffeeModel.pours[self.currentPourNumber]

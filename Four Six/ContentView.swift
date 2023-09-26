@@ -59,6 +59,7 @@ struct ContentView: View {
                                     pickerHeight = 0
                                 }
                             }
+                            .foregroundColor(Color.linkColour)
                         }
                         
                         Picker("Select water amount (ml)", selection: $waterInput) {
