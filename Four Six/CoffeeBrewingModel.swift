@@ -44,13 +44,13 @@ class CoffeeBrewingModel: ObservableObject {
         switch taste {
         case "Standard":
             firstPour = (firstStage * 0.5).rounded()
-            secondPour = (firstStage * 0.5).rounded()
+            secondPour = firstStage - firstPour
         case "Sweeter":
             firstPour = (firstStage * 0.4).rounded()
-            secondPour = (firstStage * 0.6).rounded()
+            secondPour = firstStage - firstPour
         case "Brighter":
             firstPour = (firstStage * 0.6).rounded()
-            secondPour = (firstStage * 0.4).rounded()
+            secondPour = firstStage - firstPour
         default:
             //Handle unexpected case
             break
@@ -73,8 +73,10 @@ class CoffeeBrewingModel: ObservableObject {
         }
         
         let remainingPourSize = Int((secondStage / Double(remainingPoursCount)).rounded())
-        for _ in 1...remainingPoursCount {
+        var remainingPourSum = 0
+        for _ in 1..<remainingPoursCount {
             pours.append(remainingPourSize)
+            remainingPourSum += remainingPourSize
         }
     }
     

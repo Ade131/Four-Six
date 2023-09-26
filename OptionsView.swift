@@ -15,7 +15,7 @@ struct OptionsView: View {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
                 Text("Options")
-                    .font(.largeTitle)
+                    .font(.title)
                     .padding()
                 
                 //Taste selection
