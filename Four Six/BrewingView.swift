@@ -28,6 +28,9 @@ struct BrewingView: View {
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
     @State private var currentStep: Int = 0 // Current step
+    //Animation Variables
+    @State private var stageProgress: Double = 1.0 // Smooth timer progress
+    @State private var shouldAnimateProgress: Bool = false //Don't animate between steps
     
     //Calculate total pours for brewing progress
     var totalSteps: Int {
@@ -45,18 +48,35 @@ struct BrewingView: View {
                 
                 Text(formatTime(currentTime))
                     .font(.title)
+                    .monospacedDigit()
                 
                 Spacer()
                 
-                Text(formatTime(stageTime))
-                    .font(.system(size: 36))
-                    .padding(.bottom, 20)
+                ZStack {
+                    Circle()
+                        .stroke(Color.listSeparator, lineWidth: 10)
+                        .frame(width: 250, height: 250)
+                        .overlay(
+                            CountdownCircleShape(progress: shouldAnimateProgress ? stageProgress : 1)
+                                .stroke(Color.buttonColour, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .animation(.linear(duration: 1), value: stageTime)
+                        )
+                    
+                    VStack {
+                        
+                        Text(currentInstruction)
+                            .font(.system(size: 20))
+                        
+                            Text(formatTime(stageTime))
+                                .font(.system(size: 36))
+                                .monospacedDigit()
+                    }
+                }
+                .padding()
                 
-                Text(currentInstruction)
-                    .font(.system(size: 24))
                 
                 Text("\(totalPouredWeight)g total")
-                    .font(.system(size: 16))
+                    .font(.system(size: 20))
                 
                 Spacer()
                 
@@ -114,10 +134,21 @@ struct BrewingView: View {
     private func startBrewing() {
         //5 seconds pre timer
         self.stageTime = preTimerSeconds
+        
+        //set up animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation {
+                shouldAnimateProgress = true
+            }
+        }
+        
+        //Timer logic
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.currentInstruction = "Get Ready"
             //Decrease time
             self.stageTime -= 1
+            // Calculate the stage progress
+            self.stageProgress = Double(self.stageTime) / Double(preTimerSeconds)
             
             //Move to pours once pretimer complete
             if self.stageTime < 0 {
@@ -137,12 +168,25 @@ struct BrewingView: View {
         self.totalPouredWeight = 0
         self.currentStep += 1 //incr step
         
+        withAnimation(.none) {
+               shouldAnimateProgress = false
+               stageProgress = 1.0
+           }
+        
         //Initialise the first pour
         let firstPourAmount = coffeeModel.pours[self.currentPourNumber]
         self.totalPouredWeight += firstPourAmount
         self.currentInstruction = "Pour \(firstPourAmount)g"
         self.stageTime = pourTimeSeconds // Set the first pour time to 10 seconds
         isDripping = true
+        
+        //Set up animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation {
+                shouldAnimateProgress = true
+            }
+        }
+        
         schedulePours()
     }
     
@@ -158,8 +202,10 @@ struct BrewingView: View {
         
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.stageTime -= 1
+            // Calculate the stage progress
+            self.stageProgress = Double(self.stageTime) / Double(currentMaxTime())
             
-            if self.stageTime <= 0 {
+            if self.stageTime < 0 {
                 self.moveToNextStage()
             }
         }
@@ -169,10 +215,16 @@ struct BrewingView: View {
     private func moveToNextStage() {
         self.currentStep += 1 //incr step
         
+        withAnimation(.none) {
+               shouldAnimateProgress = false
+               stageProgress = 1.0
+           }
+        
         //Check if brew is complete
         if self.currentPourNumber >= coffeeModel.pours.count - 1 {
             self.timer?.invalidate()
-            self.currentInstruction = "Remove dripper when finished"
+            self.currentInstruction = "Remove dripper\n when finished"
+            self.stageTime = 0
             return
         }
         
@@ -188,6 +240,12 @@ struct BrewingView: View {
         }
         
         isDripping.toggle()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    shouldAnimateProgress = true
+                }
+            }
     }
     
     //Logic for pause/resume while brewing
@@ -200,6 +258,23 @@ struct BrewingView: View {
         isPaused = false
         schedulePours()
     }
+    
+    //Function to get the current stage time for the timer
+    private func currentMaxTime() -> Double {
+        if !preTimerDone {
+            return Double(preTimerSeconds)
+        }
+        return isDripping ? Double(pourTimeSeconds) : Double(waitTimeSeconds)
+    }
+    
+    // Function to calculate timer size
+    func calculateMinWidth() -> CGFloat {
+        // Replace "00:00" with the widest string that could be displayed
+        let sampleString = "WW:WW"
+        let sampleStringSize = sampleString.size(withAttributes: [.font: UIFont.systemFont(ofSize: 36)])
+        return sampleStringSize.width
+    }
+
 }
 
 //Func to convert time in seconds to minutes:seconds
@@ -207,6 +282,26 @@ private func formatTime(_ seconds: Int) -> String {
     let minutes = seconds / 60
     let seconds = seconds % 60
     return String(format: "%02d:%02d", minutes, seconds)
+}
+
+//Countdown circle shape definition
+struct CountdownCircleShape: Shape, Animatable {
+    var progress: CGFloat
+    
+    var animatableData: Double {
+        get {progress}
+        set {progress = newValue}
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY),
+                    radius: rect.width / 2,
+                    startAngle: Angle(degrees: -90),
+                    endAngle: Angle(degrees: -90 + 360 * Double(progress)),
+                    clockwise: false)
+        return path
+    }
 }
 
 
