@@ -10,7 +10,7 @@ import AVFoundation
 import AudioToolbox
 
 //Constants for readability
-let preTimerSeconds = 3
+let preTimerSeconds = 5
 let pourTimeSeconds = 10
 let waitTimeSeconds = 35
 
@@ -37,6 +37,8 @@ struct BrewingView: View {
     @State private var isBrewing = false // brew active flag
     @State private var isPaused = false // pause timer flag
     @State private var isComplete = false //brewing complete flag
+    @State private var isViewActive = false // Is view open flag
+    @State private var isSwipeGestureEnabled = false // Swipe left back gesture
     //Animation Variables
     @State private var stageProgress: Double = 1.0 // Smooth timer progress
     @State private var shouldAnimateProgress: Bool = false //Don't animate between steps
@@ -44,6 +46,7 @@ struct BrewingView: View {
     var totalSteps: Int {
         return ((coffeeModel.pours.count * 2) - 1)
     }
+    
     
     var body: some View {
         //UI
@@ -80,9 +83,9 @@ struct BrewingView: View {
                             .font(.system(size: 30))
                             .multilineTextAlignment(.center)
                         
-                            Text(formatTime(stageTime))
-                                .font(.system(size: 36))
-                                .monospacedDigit()
+                        Text(formatTime(stageTime))
+                            .font(.system(size: 36))
+                            .monospacedDigit()
                     }
                 }
                 .frame(height: 300)
@@ -133,7 +136,7 @@ struct BrewingView: View {
                                 }
                             }
                         }
-                    //show 'done' button if complete
+                        //show 'done' button if complete
                     } else {
                         Button(" Done ") {
                             stopBrewing()
@@ -182,7 +185,7 @@ struct BrewingView: View {
         
         scheduleUniversalTimer()
     }
-
+    
     private func scheduleUniversalTimer() {
         self.timer?.invalidate()
         self.totalTimeTimer?.invalidate()
@@ -192,16 +195,16 @@ struct BrewingView: View {
                 self.currentTime += 1
             }
         }
-
+        
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.stageTime -= 1
             self.stageProgress = Double(self.stageTime) / Double(currentMaxTime())
             
             //Play audio
             if (self.stageTime == 2 || self.stageTime == 1) && coffeeModel.audioEnabled {
-                        countdownAudioPlayer?.currentTime = 0
-                        countdownAudioPlayer?.play()
-                    }
+                countdownAudioPlayer?.currentTime = 0
+                countdownAudioPlayer?.play()
+            }
             
             if self.stageTime == 0 && coffeeModel.audioEnabled {
                 finishAudioPlayer?.play()
@@ -212,7 +215,7 @@ struct BrewingView: View {
             }
         }
     }
-
+    
     private func moveToNextStage() {
         withAnimation(.none) {
             shouldAnimateProgress = false
@@ -264,7 +267,7 @@ struct BrewingView: View {
             }
         }
     }
-
+    
     
     //Logic for pause/resume while brewing
     private func pauseBrewing() {
@@ -292,7 +295,7 @@ struct BrewingView: View {
         countdownAudioPlayer?.stop() // Stop any playing countdown audio
         finishAudioPlayer?.stop() // Stop any playing finish audio
     }
-
+    
 }
 
 //Func to convert time in seconds to minutes:seconds
@@ -334,7 +337,6 @@ private func prepareAudio() {
         print("Couldn't load audio files")
     }
 }
-
 
 // For preview
 struct BrewingView_Previews: PreviewProvider {
