@@ -6,14 +6,17 @@
 //
 
 import SwiftUI
+import AVFoundation
+import AudioToolbox
 
 //Constants for readability
-let preTimerSeconds = 5
+let preTimerSeconds = 3
 let pourTimeSeconds = 10
 let waitTimeSeconds = 25
 
 struct BrewingView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>  // For navigation
     
     //Properties for brewing process
     @State private var totalPouredWeight = 0 //Weight poured
@@ -55,7 +58,7 @@ struct BrewingView: View {
                 ZStack {
                     Circle()
                         .stroke(Color.listSeparator, lineWidth: 10)
-                        .frame(width: 250, height: 250)
+                        .frame(width: 270, height: 270)
                         .overlay(
                             CountdownCircleShape(progress: shouldAnimateProgress ? stageProgress : 1)
                                 .stroke(Color.buttonColour, style: StrokeStyle(lineWidth: 10, lineCap: .round))
@@ -82,41 +85,48 @@ struct BrewingView: View {
                 
                 ZStack {
                     //Pause / Skip buttons
-                    HStack {
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            if isPaused {
-                                resumeBrewing()
-                            } else if isBrewing {
-                                pauseBrewing()
-                            } else {
-                                startBrewing()
-                            }
-                            isBrewing.toggle()
-                        }) {
-                            Image(systemName: isBrewing ? "pause.fill" : "play.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(Color.buttonColour)
-                        }
-                        
-                        Spacer()
-                    }
-                    if preTimerDone && currentPourNumber < (coffeeModel.pours.count - 1) {
+                    if currentInstruction != "Remove dripper" {
                         HStack {
+                            
                             Spacer()
                             
                             Button(action: {
-                                self.moveToNextStage()
+                                if isPaused {
+                                    resumeBrewing()
+                                } else if isBrewing {
+                                    pauseBrewing()
+                                } else {
+                                    startBrewing()
+                                }
+                                isBrewing.toggle()
                             }) {
-                                Image(systemName: "forward.fill")
+                                Image(systemName: isBrewing ? "pause.fill" : "play.fill")
                                     .resizable()
                                     .frame(width: 40, height: 40)
-                                    .foregroundColor(Color.buttonColour)                                .padding(.trailing, 20)
+                                    .foregroundColor(Color.buttonColour)
+                            }
+                            
+                            Spacer()
+                        }
+                        if preTimerDone && currentPourNumber < (coffeeModel.pours.count - 1) {
+                            HStack {
+                                Spacer()
+                                
+                                Button(action: {
+                                    self.moveToNextStage()
+                                }) {
+                                    Image(systemName: "forward.fill")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(Color.buttonColour)                                .padding(.trailing, 20)
+                                }
                             }
                         }
+                    } else {
+                        Button("Done") {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                        .buttonStyle(StartButton())
                     }
                 }
             }
@@ -128,6 +138,10 @@ struct BrewingView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button("Cancel") {
+            presentationMode.wrappedValue.dismiss()
+        })
     }
     
     //Begin the brewing logic
@@ -220,10 +234,12 @@ struct BrewingView: View {
                stageProgress = 1.0
            }
         
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        
+        
         //Check if brew is complete
         if self.currentPourNumber >= coffeeModel.pours.count - 1 {
-            self.timer?.invalidate()
-            self.currentInstruction = "Remove dripper\n when finished"
+            self.currentInstruction = "Remove dripper"
             self.stageTime = 0
             return
         }
@@ -265,14 +281,6 @@ struct BrewingView: View {
             return Double(preTimerSeconds)
         }
         return isDripping ? Double(pourTimeSeconds) : Double(waitTimeSeconds)
-    }
-    
-    // Function to calculate timer size
-    func calculateMinWidth() -> CGFloat {
-        // Replace "00:00" with the widest string that could be displayed
-        let sampleString = "WW:WW"
-        let sampleStringSize = sampleString.size(withAttributes: [.font: UIFont.systemFont(ofSize: 36)])
-        return sampleStringSize.width
     }
 
 }
