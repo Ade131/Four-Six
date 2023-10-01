@@ -38,7 +38,7 @@ struct BrewingView: View {
     @State private var isPaused = false // pause timer flag
     @State private var isComplete = false //brewing complete flag
     @State private var isViewActive = false // Is view open flag
-    @State private var isSwipeGestureEnabled = false // Swipe left back gesture
+    @State private var showingCancelAlert = false //Cancel button
     //Animation Variables
     @State private var stageProgress: Double = 1.0 // Smooth timer progress
     @State private var shouldAnimateProgress: Bool = false //Don't animate between steps
@@ -53,10 +53,42 @@ struct BrewingView: View {
         ZStack {
             Color.backgroundColour.ignoresSafeArea()
             VStack {
-                Text("Stage \(currentStep) of \(totalSteps + 1)")
-                    .font(.system(size: 20))
-                    .padding(6)
-                    .monospacedDigit()
+                HStack {
+                    Button(action: {
+                        showingCancelAlert = true
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark")
+                            Text("Cancel")
+                        }
+                        .foregroundColor(Color.linkColour)
+                        .padding(.leading, 15)
+                    }
+                    .alert(isPresented: $showingCancelAlert) {
+                        Alert(
+                            title: Text("Cancel the brew?"),
+                            primaryButton: .destructive(Text("Yes")) {
+                                stopBrewing()
+                                presentationMode.wrappedValue.dismiss()
+                            },
+                            secondaryButton: .cancel(Text("No"))
+                            )
+                    }
+                    Spacer()
+                    
+                    Text("\(currentStep) of \(totalSteps + 1)")
+                        .font(.system(size: 20))
+                        .padding(6)
+                        .monospacedDigit()
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Image(systemName: "xmark").opacity(0)
+                        Text("Cancel").opacity(0)
+                    }
+                    .padding(.trailing, 15)
+                }
                 
                 Text("Total Time")
                     .font(.footnote)
@@ -158,17 +190,6 @@ struct BrewingView: View {
             //Prepare audio files
             prepareAudio()
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button(action: {
-            stopBrewing()
-            presentationMode.wrappedValue.dismiss()
-        }) {
-            HStack {
-                Image(systemName: "xmark")
-                Text("Cancel")
-            }
-            .foregroundColor(Color.linkColour)
-        })
     }
     
     private func startBrewing() {

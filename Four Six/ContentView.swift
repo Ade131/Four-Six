@@ -100,7 +100,7 @@ struct ContentView: View {
                         Text("Start Brewing")
                     }
                     .buttonStyle(StartButton())
-                    .navigationDestination(isPresented: $navigateToBrew, destination: { BrewingView() })
+                    .fullScreenCover(isPresented: $navigateToBrew, content: { BrewingView() })
                     
                     
                     Spacer()

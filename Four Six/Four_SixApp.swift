@@ -16,22 +16,27 @@ struct Four_SixApp: App {
     //On app load
     init() {
         configurePickerAppearance()
+        //Adjust navigation bar opacity
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.4)
+        UINavigationBar.appearance().standardAppearance = appearance
     }
     //Dark/Light mode settings
     @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference
     
     //Appearance settings
     var appearanceSwitch: ColorScheme? {
-            if appearanceSelection == 1 {
-                return .light
-            }
-            else if appearanceSelection == 2 {
-                return .dark
-            }
-            else {
-                return .none
-            }
+        if appearanceSelection == 1 {
+            return .light
         }
+        else if appearanceSelection == 2 {
+            return .dark
+        }
+        else {
+            return .none
+        }
+    }
     
     //Changing segmented picker styles
     private func configurePickerAppearance() {
@@ -59,7 +64,7 @@ extension UINavigationController: UIGestureRecognizerDelegate {
         super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self
     }
-
+    
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return viewControllers.count > 1
     }
