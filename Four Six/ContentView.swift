@@ -18,6 +18,9 @@ struct ContentView: View {
     @State private var pickerHeight: CGFloat = 0
     @State private var selectedPickerIndex = 0
     @State private var editing = false
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     var pickerOptions: [Int] {
         Array(stride(from: 200, to: 601, by: 10))
     }
@@ -29,9 +32,19 @@ struct ContentView: View {
                 Color.backgroundColour.ignoresSafeArea()
                 VStack(spacing: 10) {
                     
-                    Text("4:6")
-                        .font(.largeTitle)
-                        .padding(.top, -40)
+                    Spacer()
+                    
+                    if colorScheme == .dark {
+                        Image("logoDark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 50) // adjust this to your liking
+                    } else {
+                        Image("logoLight")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 50) // adjust this to your liking
+                    }
                     
                     Spacer()
                     

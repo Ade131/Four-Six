@@ -17,10 +17,12 @@ struct Four_SixApp: App {
     init() {
         configurePickerAppearance()
         //Adjust navigation bar opacity
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.4)
-        UINavigationBar.appearance().standardAppearance = appearance
+        if let uiBackgroundColor = UIColor(named: "Background") {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = uiBackgroundColor.withAlphaComponent(0.8)
+            UINavigationBar.appearance().standardAppearance = appearance
+        }
     }
     //Dark/Light mode settings
     @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Dark/Light Preference

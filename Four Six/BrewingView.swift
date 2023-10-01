@@ -66,7 +66,7 @@ struct BrewingView: View {
                     }
                     .alert(isPresented: $showingCancelAlert) {
                         Alert(
-                            title: Text("Cancel the brew?"),
+                            title: Text("Cancel the Brew?"),
                             primaryButton: .destructive(Text("Yes")) {
                                 stopBrewing()
                                 presentationMode.wrappedValue.dismiss()
