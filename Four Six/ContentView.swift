@@ -58,92 +58,98 @@ struct ContentView: View {
                             .font(.title)
                             .fontWeight(.bold)
                         
-                        if pickerHeight == 0 {
-                            Button("Edit") {
-                                withAnimation {
-                                    pickerHeight = 150
+                        ZStack {
+                            if pickerHeight == 0 {
+                                Button("Edit") {
+                                    withAnimation {
+                                        pickerHeight = 150
+                                    }
+                                    
                                 }
-                                
+                                .foregroundColor(Color.linkColour)
+                                .opacity(pickerHeight == 0 ? 1 : 0)
+                                .animation(.easeIn(duration: 0.3), value: pickerHeight)
+                            } else {
+                                Button("Done") {
+                                    withAnimation {
+                                        pickerHeight = 0
+                                    }
+                                }
+                                .foregroundColor(Color.linkColour)
+                                .opacity(pickerHeight > 0 ? 1 : 0)
+                                .animation(.easeIn(duration: 0.3), value: pickerHeight)
                             }
-                            .foregroundColor(Color.linkColour)
-                        } else {
-                            Button("Done") {
-                                withAnimation {
-                                    pickerHeight = 0
+                        }
+                            
+                            Picker("Select water amount (ml)", selection: $waterInput) {
+                                ForEach(pickerOptions, id: \.self) { option in
+                                    Text("\(option)").tag("\(option)")
                                 }
                             }
-                            .foregroundColor(Color.linkColour)
+                            .labelsHidden()
+                            .pickerStyle(WheelPickerStyle())
+                            .frame(height: pickerHeight)
+                            .clipped()
                         }
                         
-                        Picker("Select water amount (ml)", selection: $waterInput) {
-                            ForEach(pickerOptions, id: \.self) { option in
-                                Text("\(option)").tag("\(option)")
-                            }
+                        VStack(spacing: 3) {
+                            Text("Prepare")
+                                .font(.headline)
+                            Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            Text("of ground coffee")
+                                .font(.headline)
+                            
                         }
-                        .labelsHidden()
-                        .pickerStyle(WheelPickerStyle())
-                        .frame(height: pickerHeight)
-                        .clipped()
-                    }
-                    
-                    VStack(spacing: 3) {
-                        Text("Prepare")
-                            .font(.headline)
-                        Text(" \(Int((Double(waterInput) ?? 250) / Double(coffeeModel.ratio)))g")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        Text("of ground coffee")
-                            .font(.headline)
+                        .padding(.top)
                         
+                        Button("Options") {
+                            showOptions.toggle()
+                        }
+                        .sheet(isPresented: $showOptions) {
+                            OptionsView()
+                        }
+                        .buttonStyle(OptionsButton())
+                        .padding()
+                        
+                        Button(action: {
+                            startBrew()
+                        }) {
+                            Text("Start Brewing")
+                        }
+                        .buttonStyle(StartButton())
+                        .fullScreenCover(isPresented: $navigateToBrew, content: { BrewingView() })
+                        
+                        
+                        Spacer()
                     }
-                    .padding(.top)
-                    
-                    Button("Options") {
-                        showOptions.toggle()
-                    }
-                    .sheet(isPresented: $showOptions) {
-                        OptionsView()
-                    }
-                    .buttonStyle(OptionsButton())
-                    .padding()
-                    
-                    Button(action: {
-                        startBrew()
-                    }) {
-                        Text("Start Brewing")
-                    }
-                    .buttonStyle(StartButton())
-                    .fullScreenCover(isPresented: $navigateToBrew, content: { BrewingView() })
-                    
-                    
-                    Spacer()
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
-                            Image(systemName: "gearshape.fill")
-                                .foregroundColor(Color.iconColour)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            NavigationLink(destination: SettingsView().environmentObject(coffeeModel)) {
+                                Image(systemName: "gearshape.fill")
+                                    .foregroundColor(Color.iconColour)
+                            }
                         }
                     }
                 }
             }
         }
+        
+        //Logic when pressing start button
+        func startBrew() {
+            if let waterWeight = Double(waterInput) {
+                coffeeModel.updateWaterWeight(weight: waterWeight)
+                coffeeModel.calculatePours()
+            }
+            self.navigateToBrew = true
+        }
     }
     
-    //Logic when pressing start button
-    func startBrew() {
-        if let waterWeight = Double(waterInput) {
-            coffeeModel.updateWaterWeight(weight: waterWeight)
-            coffeeModel.calculatePours()
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+                .environmentObject(CoffeeBrewingModel())
         }
-        self.navigateToBrew = true
     }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environmentObject(CoffeeBrewingModel())
-    }
-}
-
+    
