@@ -32,9 +32,6 @@ class CoffeeBrewingModel: ObservableObject {
     
     //Func to calculate the brewing pours and sizes
     func calculatePours() {
-        let firstStage = waterWeight * 0.4
-        let secondStage = waterWeight * 0.6
-        
         pours.removeAll() //Clear existing pours
         calculateFirstStagePours()
         calculateSecondStagePours()
@@ -97,17 +94,30 @@ class CoffeeBrewingModel: ObservableObject {
         }
     
     //Saved settings for vibration and audio
-    @Published var audioEnabled: Bool = UserDefaults.standard.bool(forKey: "sound") {
+    @Published var audioEnabled: Bool = {
+        if UserDefaults.standard.object(forKey: "sound") == nil {
+            return true // Default value
+        } else {
+            return UserDefaults.standard.bool(forKey: "sound")
+        }
+    }() {
         didSet {
             UserDefaults.standard.set(audioEnabled, forKey: "sound")
         }
     }
-    
-    @Published var vibrateEnabled: Bool = UserDefaults.standard.bool(forKey: "vibrate") {
+
+    @Published var vibrateEnabled: Bool = {
+        if UserDefaults.standard.object(forKey: "vibrate") == nil {
+            return true // Default value
+        } else {
+            return UserDefaults.standard.bool(forKey: "vibrate")
+        }
+    }() {
         didSet {
             UserDefaults.standard.set(vibrateEnabled, forKey: "vibrate")
         }
     }
+    
     //Function to toggle audio settings
     func toggleAudio() {
         audioEnabled.toggle()
