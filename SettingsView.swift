@@ -12,19 +12,18 @@ struct SettingsView: View {
     @EnvironmentObject var coffeeModel: CoffeeBrewingModel
     
     //Saved settings
-    @AppStorage("appearanceSelection") private var appearanceSelection: Int = 0 //Appearance Selection
+    @AppStorage("appearanceSelection") private var appearanceSelection: Int = AppearanceSetting.automatic.rawValue
     
     var body: some View {
         List {
             Section(header: Text("Settings")) {
-                Toggle("Sounds", isOn: $coffeeModel.audioEnabled)
+                Toggle("Sound", isOn: $coffeeModel.audioEnabled)
                     .toggleStyle(CoffeeToggleStyle())
                 
                     .listRowSeparatorTint(.listSeparator)
                 
                 Toggle("Vibrate", isOn: $coffeeModel.vibrateEnabled)
                     .toggleStyle(CoffeeToggleStyle())
-                
                 
                     .listRowSeparatorTint(.listSeparator)
                 
@@ -56,9 +55,14 @@ struct SettingsView: View {
             .listRowBackground(Color.listColour)
             
             Section(header: Text("Feedback")) {
-                NavigationLink(destination: Text("Rate on App Store")) {
-                    Text("Rate in the App Store")
+                
+                Button("Rate in the App Store") {
+                    if let url = URL(string: "https://apps.apple.com/us/app/four-six/id6468425955?action=write-review"),
+                       UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
                 }
+                .foregroundColor(Color.textColourInverted)
                 
                 .listRowSeparatorTint(.listSeparator)
                 
@@ -139,10 +143,11 @@ struct FAQView: View {
         ("How should I grind my coffee?", "A coarser grind than a regular V60 setting is recommended, but you can experiment with what works best for you."),
         ("What temperature should my water be?", "It depends on the coffee! Lighter roasts can stand higher temperatures, up to 96 degrees, whereas darker roasts can be extracted as low as 80 degrees. Try different temparatures and see what tastes best. We recommend around 94 degrees as a starting point."),
         ("How should I pour the water?", "Pour the water in circles, starting from the middle and moving outwards towards the edge. Make sure that all of the grounds are covered on the first pour. Each pour should take 6-10 seconds."),
-        ("What do the options do?", "Balance\nLets you fine-tune the water ratio in the initial stage of brewing. Opting for more water upfront enhances the brightness of the flavor, while reducing it yields a sweeter cup.\n\nStrength\nAllows you to control the intensity by altering the number of pours in the second stage: 'Light' for a subtler brew in 2 pours, 'Strong' for a bolder experience with 4 pours.\n\nRatio\nSets the ratio of coffee:water you want to brew, with lower ratio resulting in a more concentrated, but less extracted, cup.\n\nWe recommend starting with the defaults, and adjusting the balance and strength from there. These options are saved, so once you find a cup you like, you can set and forget!"),
-        ("What if there's still water draining when I start the next pour?", "Ideally the water should completely drain before you begin the next pour. You could try grinding coarser, pouring faster, or changing the filter.\n\nBleached filters made in the Netherlands are known to have a slower drain time than the filters manufactured in Japan. 45 seconds between pours is just a guideline, and you can always pause the brew timer while you wait for the water to drain."),
+        ("What do the options do?", "Balance\nLets you fine-tune the water ratio in the initial stage of brewing. Opting for more water upfront enhances the brightness of the flavor, while reducing it yields a sweeter cup.\n\nStrength\nAllows you to control the intensity by altering the number of pours in the second stage: 'Light' for a subtler brew in 2 pours, 'Strong' for a bolder experience with 4 pours.\n\nThese options are saved, so once you find a cup you like, you can set and forget!"),
+        ("What if there's still water draining when I start the next pour?", "Ideally the water should mostly drain before you begin the next pour, with coffee grounds above the water level. You could try grinding coarser, pouring faster, or changing the filter.\n\nBleached filters made in the Netherlands are known to have a slower drain time than the filters manufactured in Japan. 45 seconds between pours is just a guideline, and you can always pause the brew timer while you wait for the water to drain."),
         ("How long does it usually take to brew using the 4:6 method?", "It depends on your strength setting. Stronger coffee requires more pours, which will increase the brewing time. On average, a finished cup will take around 4 minutes from the first pour."),
-        ("Why is my final brew weight more/less than what I assigned?", "The pour size measurements are rounded to make brewing easier, which may mean a few extra ml of water at the end of the process")
+        ("Why is my final brew weight more/less than what I assigned?", "The pour size measurements are rounded to make brewing easier, which may mean a few extra ml of water at the end of the process"),
+        ("What ratio is being used?", "We use a standard ratio of 1:16")
     ]
     
     var body: some View {

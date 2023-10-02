@@ -18,8 +18,9 @@ extension Color {
     static let listColour = Color("List Items")
     static let listSeparator = Color("List Separator")
     static let toggleColour = Color("Toggle")
+    static let textColourInverted = Color("Text Inverted")
 
-    
+    //Initialise colour from hex string
     init(hex: String) {
         let hex = hex.replacingOccurrences(of: "#", with: "")
         let scanner = Scanner(string: hex)
@@ -48,23 +49,9 @@ struct StartButton: ButtonStyle {
             .background(Color.buttonColour)
             .foregroundColor(Color.textColour)
             .cornerRadius(30)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.90 : 1.0)
     }
 }
-
-struct OptionsButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(.horizontal, 20)
-            .padding(.vertical, 15)
-            .background(Color.buttonColour)
-            .foregroundColor(Color.textColour)
-            .cornerRadius(30)
-            .scaleEffect(0.8)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-    }
-}
-
 
 struct CoffeeToggleStyle: ToggleStyle {
     var onColor = Color.toggleColour // Your desired "on" color

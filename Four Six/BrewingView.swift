@@ -11,8 +11,8 @@ import AudioToolbox
 
 //Constants for readability
 let preTimerSeconds = 5
-let pourTimeSeconds = 10
-let waitTimeSeconds = 35
+let pourTimeSeconds = 12
+let waitTimeSeconds = 33
 
 //Sounds
 private var countdownAudioPlayer: AVAudioPlayer?
@@ -244,7 +244,7 @@ struct BrewingView: View {
         }
         
         //Vibrate on stage transition if enabled
-        if coffeeModel.vibrateEnabled {
+        if coffeeModel.vibrateEnabled && !isComplete {
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         }
         

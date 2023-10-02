@@ -16,10 +16,7 @@
 		70A335D62ABB3DB20061FBA3 /* CoffeeBrewingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */; };
 		70B5EE772AC387860015AA7D /* countdown.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70B5EE762AC387860015AA7D /* countdown.mp3 */; };
 		70B5EE792AC387DA0015AA7D /* finish.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 70B5EE782AC387DA0015AA7D /* finish.mp3 */; };
-		70E4F4A02ABBADA300ED6A71 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */; };
 		70E4F4A22ABBB88A00ED6A71 /* BrewingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */; };
-		70F9B5A32AC9B221000D729D /* logoLight.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F9B5A12AC9B220000D729D /* logoLight.png */; };
-		70F9B5A42AC9B221000D729D /* logoDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F9B5A22AC9B220000D729D /* logoDark.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,10 +30,7 @@
 		70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeBrewingModel.swift; sourceTree = "<group>"; };
 		70B5EE762AC387860015AA7D /* countdown.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = countdown.mp3; sourceTree = "<group>"; };
 		70B5EE782AC387DA0015AA7D /* finish.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = finish.mp3; sourceTree = "<group>"; };
-		70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OptionsView.swift; path = ../OptionsView.swift; sourceTree = "<group>"; };
 		70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewingView.swift; sourceTree = "<group>"; };
-		70F9B5A12AC9B220000D729D /* logoLight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logoLight.png; sourceTree = "<group>"; };
-		70F9B5A22AC9B220000D729D /* logoDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logoDark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,12 +66,10 @@
 				708F88782A61651000710FCE /* Four_SixApp.swift */,
 				708F887A2A61651000710FCE /* ContentView.swift */,
 				70E4F4A12ABBB88A00ED6A71 /* BrewingView.swift */,
-				70E4F49F2ABBADA300ED6A71 /* OptionsView.swift */,
 				7088A5E12ABDEB3C005B4A87 /* SettingsView.swift */,
 				70A335D52ABB3DB20061FBA3 /* CoffeeBrewingModel.swift */,
 				7088A5DF2ABDD85B005B4A87 /* UIElements.swift */,
 				70B5EE712AC3830C0015AA7D /* Sounds */,
-				70F9B5A02AC9B212000D729D /* Logo */,
 				708F887C2A61651100710FCE /* Assets.xcassets */,
 				708F887E2A61651100710FCE /* Preview Content */,
 			);
@@ -99,15 +91,6 @@
 				70B5EE782AC387DA0015AA7D /* finish.mp3 */,
 			);
 			path = Sounds;
-			sourceTree = "<group>";
-		};
-		70F9B5A02AC9B212000D729D /* Logo */ = {
-			isa = PBXGroup;
-			children = (
-				70F9B5A22AC9B220000D729D /* logoDark.png */,
-				70F9B5A12AC9B220000D729D /* logoLight.png */,
-			);
-			path = Logo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,9 +151,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70F9B5A42AC9B221000D729D /* logoDark.png in Resources */,
 				70B5EE792AC387DA0015AA7D /* finish.mp3 in Resources */,
-				70F9B5A32AC9B221000D729D /* logoLight.png in Resources */,
 				708F88802A61651100710FCE /* Preview Assets.xcassets in Resources */,
 				70B5EE772AC387860015AA7D /* countdown.mp3 in Resources */,
 				708F887D2A61651100710FCE /* Assets.xcassets in Resources */,
@@ -190,7 +171,6 @@
 				708F88792A61651000710FCE /* Four_SixApp.swift in Sources */,
 				70E4F4A22ABBB88A00ED6A71 /* BrewingView.swift in Sources */,
 				7088A5E02ABDD85B005B4A87 /* UIElements.swift in Sources */,
-				70E4F4A02ABBADA300ED6A71 /* OptionsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
