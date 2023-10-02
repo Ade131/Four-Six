@@ -71,9 +71,6 @@ struct SettingsView: View {
                 }
             }
             .listRowBackground(Color.listColour)
-            
-            Section(footer: Text("Version 1.0.0")) {
-            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.backgroundColour)
